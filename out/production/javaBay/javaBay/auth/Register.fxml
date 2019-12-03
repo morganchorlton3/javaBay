@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml" alignment="CENTER" hgap="20" vgap="10" fx:controller="javaBay.auth.RegisterController">
+  <Label GridPane.rowIndex="0" GridPane.columnIndex="0">
+    Username:
+  </Label>
+  <TextField prefWidth="200" GridPane.rowIndex="0"
+             GridPane.columnIndex="1" fx:id="username">
+  </TextField>
+
+  <Label GridPane.rowIndex="1" GridPane.columnIndex="0">
+    Email:
+  </Label>
+  <TextField prefWidth="200" GridPane.rowIndex="1"
+             GridPane.columnIndex="1" fx:id="email">
+  </TextField>
+
+  <Label GridPane.rowIndex="2" GridPane.columnIndex="0">
+    Password:
+  </Label>
+  <PasswordField prefWidth="200" GridPane.rowIndex="2"
+                 GridPane.columnIndex="1" fx:id="password">
+  </PasswordField>
+
+  <Label GridPane.rowIndex="3" GridPane.columnIndex="0">
+    Confirm Password:
+  </Label>
+  <PasswordField prefWidth="200" GridPane.rowIndex="3"
+                 GridPane.columnIndex="1" fx:id="confirm_password">
+  </PasswordField>
+
+  <HBox alignment="BOTTOM_RIGHT" GridPane.rowIndex="4"
+        GridPane.columnIndex="0" GridPane.columnSpan="2">
+    <children>
+      <Button prefWidth="100" defaultButton="true"
+              text="Back" alignment="CENTER" fx:id="backBTN" onAction="#backBtn"></Button>
+      <Button prefWidth="100" defaultButton="true"
+              text="Register" alignment="CENTER" fx:id="registerBtn" onAction="#registerUser"></Button>
+    </children>
+  </HBox>
+</GridPane>

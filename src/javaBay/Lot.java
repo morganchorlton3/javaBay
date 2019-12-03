@@ -1,0 +1,62 @@
+package javaBay;
+
+import net.jini.core.entry.Entry;
+
+public class Lot implements Entry {
+    // Variables
+    private static Lot instance;
+    public Integer lotNumber, userID, Status;
+    public String lotName, lotDescription, userName;
+    public Double BINprice, currentAprice, startAprice;
+
+    // No arg contructor
+    public Lot (){
+    }
+
+
+    public Lot (int lotNo){
+        lotNumber = lotNo;
+    }
+
+    public Lot (int lotNo, int user){
+        lotNumber = lotNo;
+        userID = user;
+    }
+
+    public Lot (String name){
+        lotName = name;
+    }
+
+    // Arg constructor
+    public Lot (int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA){
+        lotNumber = job;
+        lotName = name;
+        lotDescription = description;
+        userID = userId;
+        userName = nameUser;
+        BINprice = priceBIN;
+        currentAprice = priceA;
+        startAprice = priceA;
+        Status = 0;
+    }
+
+    // lot template for id
+    /*public Lot (int ID){
+        userID = ID;
+    }*/
+
+    public void nextlot(){
+        lotNumber++;
+    }
+
+    public static Lot getInstance() {
+        return instance;
+    }
+
+    public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA) {
+        if(instance == null) {
+            instance = new Lot(job, name, description,userId,nameUser, priceBIN, priceA);
+        }
+        return instance;
+    }
+}
