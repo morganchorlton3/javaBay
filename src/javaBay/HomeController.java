@@ -161,6 +161,8 @@ public class HomeController {
                 int status = 0;
                 Lot template = new Lot(jobCounter);
                 Lot result = (Lot) space.readIfExists(template, null, TWO_SECONDS);
+                System.out.println(result.lotName + " | " + result.userID);
+                System.out.println(result.toString());
                 if(result.userID == userID){
                     new ListingNotify(result.lotNumber);
                 }
@@ -189,7 +191,4 @@ public class HomeController {
         return true;
     }
 
-    private void setupNotifys(){
-
-    }
 }

@@ -43,18 +43,22 @@ public class UserListingController {
                 space = SpaceUtils.getSpace();
                 UserSession user = UserSession.getInstance();
                 int userID = user.getUserID();
-                Lot template = new Lot(jobcounter, userID);
+                System.out.println(userID);
+                Lot template = new Lot(jobcounter);
                 Lot result = (Lot) space.read(template, null, TWO_SECONDS);
-                if (result.Status == 0) {
+                System.out.println(result.toString());
+                if(result.userID != userID){
+                    jobcounter++;
+                }else if (result.Status == 0) {
                     String lotToAdd = result.lotName;
                     activeUserListings.getItems().addAll(lotToAdd);
                     jobcounter++;
                 } else if (result.Status == 1){
-                    jobcounter++;
                     ///userListings.setText("Lot No: " + result.lotNumber + " Lot Name: " + result.lotName);
                     String lotToAdd = result.lotName;
                     bidsToAcceptListings.getItems().addAll(lotToAdd);
                     activeUserListings.getItems().addAll(lotToAdd);
+                    jobcounter++;
                 }else if(result.Status == 2 | result.Status == 3){
                     String lotToAdd = result.lotName;
                     boughtItems.getItems().addAll(lotToAdd);

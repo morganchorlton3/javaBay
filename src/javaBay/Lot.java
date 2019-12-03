@@ -63,4 +63,19 @@ public class Lot implements Entry {
         }
         return instance;
     }
+
+    @Override
+    public String toString() {
+        return "Lot{" +
+                "lotNumber=" + lotNumber +
+                ", userID=" + userID +
+                ", Status=" + Status +
+                ", lotName='" + lotName + '\'' +
+                ", lotDescription='" + lotDescription + '\'' +
+                ", userName='" + userName + '\'' +
+                ", BINprice=" + BINprice +
+                ", currentAprice=" + currentAprice +
+                ", startAprice=" + startAprice +
+                '}';
+    }
 }
