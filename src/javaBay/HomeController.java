@@ -134,7 +134,7 @@ public class HomeController {
         try {
             space = SpaceUtils.getSpace();
             Lot result = (Lot) space.read(template, null, TWO_SECONDS);
-            System.out.println(result);
+            Lot.emptyInstance();
             Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
@@ -161,14 +161,17 @@ public class HomeController {
                 int status = 0;
                 Lot template = new Lot(jobCounter);
                 Lot result = (Lot) space.readIfExists(template, null, TWO_SECONDS);
-                if (result.Status == 2 ) {
+                if(result.userID == userID){
+                    new ListingNotify(result.lotNumber);
+                }
+                if (result.Status == 2 | result.Status == 3 ) {
                     System.out.println("Lot Purchased");
                     jobCounter++;
                 } else {
                     jobCounter++;
                     ///userListings.setText("Lot No: " + result.lotNumber + " Lot Name: " + result.lotName);
                     String lotToAdd = result.lotName;
-                    System.out.println("Lot Name: " + result.lotName + "lot Status: " + result.Status);
+                    //System.out.println("Lot Name: " + result.lotName + "lot Status: " + result.Status);
                     userListings.getItems().addAll(lotToAdd);
                 }
             } catch (Exception e) {
@@ -184,5 +187,9 @@ public class HomeController {
             return false;
         }
         return true;
+    }
+
+    private void setupNotifys(){
+
     }
 }

@@ -57,7 +57,6 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
             Stage stage = (Stage) loginBtn.getScene().getWindow();
             stage.setScene(new Scene(root, 1200, 720));
-            new ListingNotify();
         } catch (Exception e) {
             Alerts.auctionAlert("No user found please register");
         }

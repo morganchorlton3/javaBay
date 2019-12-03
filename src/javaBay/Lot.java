@@ -53,6 +53,10 @@ public class Lot implements Entry {
         return instance;
     }
 
+    public static void emptyInstance(){
+        instance = null;
+    }
+
     public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA) {
         if(instance == null) {
             instance = new Lot(job, name, description,userId,nameUser, priceBIN, priceA);

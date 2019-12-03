@@ -3,13 +3,21 @@ package javaBay.listings;
 import javaBay.Alerts;
 import javaBay.Lot;
 import javaBay.SpaceUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
+
+import java.io.IOException;
 
 import static net.jini.core.lease.Lease.FOREVER;
 
@@ -24,6 +32,20 @@ public class UpdateUserController {
 
     @FXML
     TextField lotName, lotDescription, lotBINPrice, lotStartAPrice;
+    @FXML
+    Button backBtn;
+
+    @FXML
+    private void backBtn(ActionEvent event) throws IOException {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("UserListings.fxml"));
+            Stage stage = (Stage) backBtn.getScene().getWindow();
+            stage.setScene(new Scene(root, 1200, 720));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     public void initialize() {

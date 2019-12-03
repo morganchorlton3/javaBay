@@ -17,7 +17,8 @@ public class ListingNotify implements RemoteEventListener {
     private JavaSpace space;
     private RemoteEventListener theStub;
 
-    public ListingNotify() {
+    public ListingNotify(int jobID) {
+        //System.out.println(jobID);
         // find the space
         space = SpaceUtils.getSpace();
         if (space == null){
@@ -38,7 +39,7 @@ public class ListingNotify implements RemoteEventListener {
             UserSession user = UserSession.getInstance();
             int userID = user.getUserID();
             // add the listener
-            Lot template = new Lot();
+            Lot template = new Lot(jobID);
             space.notify(template, null, this.theStub, Lease.FOREVER, null);
 
         } catch (Exception e) {
@@ -49,13 +50,11 @@ public class ListingNotify implements RemoteEventListener {
     public void notify(RemoteEvent ev) {
         // this is the method called when we are notified
         // of an object of interest
-        UserSession user = UserSession.getInstance();
-        int userID = user.getUserID();
-        Lot template = new Lot(userID);
+        Lot template = new Lot();
         try {
             Lot listing = (Lot)space.readIfExists(template, null, Long.MAX_VALUE);
             System.out.println("----- LISTING NOTIFY -----");
-            System.out.println(listing.currentAprice);
+            System.out.println(listing.lotName);
         } catch (Exception e) {
             e.printStackTrace();
         }

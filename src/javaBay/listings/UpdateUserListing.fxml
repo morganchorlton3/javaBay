@@ -12,6 +12,12 @@
 
 <?import javafx.geometry.Insets?>
 <BorderPane prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="javaBay.listings.UpdateUserController">
+    <bottom>
+        <HBox>
+            <Button prefWidth="100" defaultButton="true"
+                    text="Back" alignment="CENTER" fx:id="backBtn" onAction="#backBtn"></Button>
+        </HBox>
+    </bottom>
 <center>
     <VBox spacing="10">
         <padding>

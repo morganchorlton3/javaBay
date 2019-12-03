@@ -54,7 +54,7 @@ public class DetailedLotController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (currentLot.Status == 1){
+        if (currentLot.Status == 2){
             bidValue.setDisable(true);
             placeBid.setDisable(true);
         }

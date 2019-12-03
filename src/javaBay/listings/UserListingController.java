@@ -55,7 +55,7 @@ public class UserListingController {
                     String lotToAdd = result.lotName;
                     bidsToAcceptListings.getItems().addAll(lotToAdd);
                     activeUserListings.getItems().addAll(lotToAdd);
-                }else if(result.Status == 2){
+                }else if(result.Status == 2 | result.Status == 3){
                     String lotToAdd = result.lotName;
                     boughtItems.getItems().addAll(lotToAdd);
                     jobcounter++;
@@ -74,6 +74,7 @@ public class UserListingController {
             Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
             Stage stage = (Stage) backBtn.getScene().getWindow();
             stage.setScene(new Scene(root, 1200, 720));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,10 +89,35 @@ public class UserListingController {
         try {
             space = SpaceUtils.getSpace();
             Lot result = (Lot) space.read(template, null, TWO_SECONDS);
-            System.out.println(result);
+            Lot.emptyInstance();
             Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("UpdateUserListing.fxml"));
+                Stage stage = (Stage) viewListingBtn.getScene().getWindow();
+                stage.setScene(new Scene(root, 1200, 720));
+            }catch ( Exception e) {
+                e.printStackTrace();
+                Alerts.auctionAlert("Error loading login page");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void viewBidToAccept(){
+        String selectedLot = (String) bidsToAcceptListings.getSelectionModel().getSelectedItems().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        Lot template = new Lot(selectedLot);
+        try {
+            space = SpaceUtils.getSpace();
+            Lot result = (Lot) space.read(template, null, TWO_SECONDS);
+            Lot.emptyInstance();
+            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice);
+            try {
+                Alerts.bidToAccept(result.currentAprice, result.lotNumber);
+                Parent root = FXMLLoader.load(getClass().getResource("UserListings.fxml"));
                 Stage stage = (Stage) viewListingBtn.getScene().getWindow();
                 stage.setScene(new Scene(root, 1200, 720));
             }catch ( Exception e) {
