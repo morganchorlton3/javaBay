@@ -94,7 +94,7 @@ public class UserListingController {
             space = SpaceUtils.getSpace();
             Lot result = (Lot) space.read(template, null, TWO_SECONDS);
             Lot.emptyInstance();
-            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice);
+            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("UpdateUserListing.fxml"));
                 Stage stage = (Stage) viewListingBtn.getScene().getWindow();
@@ -118,9 +118,9 @@ public class UserListingController {
             space = SpaceUtils.getSpace();
             Lot result = (Lot) space.read(template, null, TWO_SECONDS);
             Lot.emptyInstance();
-            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice);
+            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
             try {
-                Alerts.bidToAccept(result.currentAprice, result.lotNumber);
+                Alerts.bidToAccept(result);
                 Parent root = FXMLLoader.load(getClass().getResource("UserListings.fxml"));
                 Stage stage = (Stage) viewListingBtn.getScene().getWindow();
                 stage.setScene(new Scene(root, 1200, 720));

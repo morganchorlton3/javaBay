@@ -48,6 +48,10 @@
                        GridPane.columnIndex="1" fx:id="listingBINPrice">
             </TextField>
 
+            <Label GridPane.rowIndex="4" GridPane.columnIndex="0">
+                Image:
+            </Label>
+            <Button fx:id="chooseImage" text="Choose Image" onAction="#chooseImage" GridPane.rowIndex="4" GridPane.columnIndex="1"></Button>
 
 
         </GridPane>

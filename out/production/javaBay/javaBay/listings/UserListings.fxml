@@ -31,7 +31,7 @@
         <VBox>
           <Text text="Bids To Accept"></Text>
           <ListView fx:id="bidsToAcceptListings"></ListView>
-          <Button fx:id="viewBidsToAccept" mnemonicParsing="false" onAction="#viewBidToAccept" text="View Listing" />
+          <Button fx:id="viewBidsToAccept" mnemonicParsing="false" onAction="#viewBidToAccept" text="View Bid" />
         </VBox>
         <VBox>
           <Text text="Sold Listings"></Text>

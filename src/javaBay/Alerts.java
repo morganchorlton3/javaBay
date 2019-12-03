@@ -16,17 +16,19 @@ public class Alerts {
 
         alert.show();
     }
-    public static void bidToAccept(Double bid, int jobID){
+    public static void bidToAccept(Lot listing){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Bid");
-        alert.setHeaderText("Confirm Bid of " + bid.toString());
-        alert.setContentText("Do you want to confirm this bid of " + bid.toString() + "?" );
-
+        alert.setHeaderText("Confirm Bid of " + listing.currentAprice.toString());
+        alert.setContentText(
+                "You have a new bid on your item: " + listing.lotName + "\n" +
+                "Do you want to confirm this bid of " + listing.currentAprice.toString() + "?"
+        );
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            javaBay.listings.ListingController.acceptBid(jobID);
+            javaBay.listings.ListingController.acceptBid(listing.lotNumber);
         } else {
-            System.out.println("Decline");
+            javaBay.listings.ListingController.declineBid(listing.lotNumber);
         }
     }
 

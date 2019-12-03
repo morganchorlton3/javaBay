@@ -2,8 +2,6 @@ package javaBay;
 
 import javaBay.auth.UserSession;
 import javaBay.listings.ListingNotify;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,9 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.jini.space.JavaSpace;
-
 import java.io.IOException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class HomeController {
@@ -31,10 +27,12 @@ public class HomeController {
 
     private JavaSpace space;
 
-    private static final long TWO_SECONDS = 2 * 1000;  // two thousand milliseconds
+    private static final long TWOS = 2 * 1000;
 
+    //runs on load of page
     @FXML
     public void initialize() {
+        //gets current user session
         UserSession user = UserSession.getInstance();
         if(user != null) {
             userWelcome.setText("Hi, " + user.getUserName());
@@ -43,6 +41,7 @@ public class HomeController {
             logoutBtn.setVisible(true);
             checkForLots();
         }else {
+            //If there is no user disable all the buttons apart form register and login
             createListingBtn.setDisable(true);
             ViewUserListingBtn.setDisable(true);
             viewListingBtn.setDisable(true);
@@ -50,6 +49,7 @@ public class HomeController {
         }
     }
 
+    //Load Create listing page
     @FXML
     private void createListing(ActionEvent event) throws IOException {
         if(checkAuthStatus()) {
@@ -66,12 +66,7 @@ public class HomeController {
         }
     }
 
-    @FXML
-    private void openAddToAuction(ActionEvent event) throws IOException {
-        //addJob();
-    }
-
-
+    //Load Login page
     @FXML
     private void loadLogin(ActionEvent event) throws IOException {
         try {
@@ -83,7 +78,7 @@ public class HomeController {
             Alerts.auctionAlert("Error loading login page");
         }
     }
-
+    //Load register page
     @FXML
     private void loadRegister(ActionEvent event) throws IOException {
         try {
@@ -96,6 +91,7 @@ public class HomeController {
         }
     }
 
+    //log user out
     @FXML
     private void logout(ActionEvent event) throws IOException {
         UserSession user = UserSession.getInstance();
@@ -113,6 +109,7 @@ public class HomeController {
         Alerts.userAlert("You have successfully been logged out");
     }
 
+    //load all of a users individual listings
     @FXML
     private void userListing(ActionEvent event) throws IOException {
         try {
@@ -125,6 +122,7 @@ public class HomeController {
         }
     }
 
+    //View Listing
     @FXML
     private void view(ActionEvent event) throws IOException {
         String selectedLot= (String) userListings.getSelectionModel().getSelectedItems().stream()
@@ -133,9 +131,12 @@ public class HomeController {
         Lot template = new Lot(selectedLot);
         try {
             space = SpaceUtils.getSpace();
-            Lot result = (Lot) space.read(template, null, TWO_SECONDS);
+            Lot result = (Lot) space.read(template, null, TWOS);
+            //clear instance in case it has already been used
             Lot.emptyInstance();
-            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice);
+            //set lot instance to be used in next window
+            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
+            //load new window
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
                 Stage stage = (Stage) loginBtn.getScene().getWindow();
@@ -151,29 +152,33 @@ public class HomeController {
 
     public void checkForLots() {
         int jobCounter = 0;
-        ObservableList userListingList = FXCollections.observableArrayList();
-        Set<String> stringSet = null;
         while (true) {
             try {
                 space = SpaceUtils.getSpace();
                 UserSession user = UserSession.getInstance();
                 int userID = user.getUserID();
-                int status = 0;
                 Lot template = new Lot(jobCounter);
-                Lot result = (Lot) space.readIfExists(template, null, TWO_SECONDS);
-                System.out.println(result.lotName + " | " + result.userID);
-                System.out.println(result.toString());
+                Lot result = (Lot) space.readIfExists(template, null, TWOS);
                 if(result.userID == userID){
                     new ListingNotify(result.lotNumber);
                 }
-                if (result.Status == 2 | result.Status == 3 ) {
-                    System.out.println("Lot Purchased");
+                if(result.Status == 1){
+                    //Lot has an active bid
+                    if (result.userID == userID){
+                        //If the user logged in display alert for bid to accept
+                        Alerts.bidToAccept(result);
+                    }
+                    //add lot to list view
+                    String lotToAdd = result.lotName;
+                    userListings.getItems().addAll(lotToAdd);
+                    jobCounter++;
+                }else if (result.Status == 2 | result.Status == 3 ) {
+                    //Lot already purchased Don't show and go to next item
                     jobCounter++;
                 } else {
+                    //Add job to list view
                     jobCounter++;
-                    ///userListings.setText("Lot No: " + result.lotNumber + " Lot Name: " + result.lotName);
                     String lotToAdd = result.lotName;
-                    //System.out.println("Lot Name: " + result.lotName + "lot Status: " + result.Status);
                     userListings.getItems().addAll(lotToAdd);
                 }
             } catch (Exception e) {
@@ -183,6 +188,7 @@ public class HomeController {
         }
 
     }
+    //check if user is logged in
     private boolean checkAuthStatus(){
         UserSession user = UserSession.getInstance();
         if (user == null){

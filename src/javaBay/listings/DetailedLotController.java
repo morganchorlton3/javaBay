@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.jini.core.entry.UnusableEntryException;
@@ -36,6 +38,8 @@ public class DetailedLotController {
     @FXML
     Text lotName, lotDescription, lotBINPrice, lotStartAPrice, lotCurrentAPrice;
     @FXML
+    ImageView lotImage;
+    @FXML
     TextField bidValue;
     @FXML
     Button back, placeBid;
@@ -59,6 +63,8 @@ public class DetailedLotController {
             placeBid.setDisable(true);
         }
         lotName.setText("Lot Name: " + currentLot.lotName);
+        Image lotImg = new Image(currentLot.lotImage.toURI().toString());
+        lotImage.setImage(lotImg);
         lotDescription.setText("Lot Description: " + currentLot.lotDescription);
         lotBINPrice.setText("Buy It Now Price: " + currentLot.BINprice.toString());
         lotCurrentAPrice.setText("Current Auction Price: " + currentLot.currentAprice.toString());

@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.jini.core.lease.Lease;
 import net.jini.core.transaction.Transaction;
@@ -19,7 +20,11 @@ import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static net.jini.core.lease.Lease.FOREVER;
 
@@ -30,15 +35,33 @@ public class ListingController {
     @FXML
     TextField listingName, listingDescription, listingAPrice, listingBINPrice;
 
+    final FileChooser fileChooser = new FileChooser();
+
+    private Desktop desktop = Desktop.getDesktop();
+
     private JavaSpace space;
 
-    private static final long TWO_SECONDS = 2 * 1000;  // two thousand milliseconds
-    private static final long TWO_MINUTES = 2 * 1000 * 60;
+    private static int ONES = 1000;
+    private static final long TWOS = 2 * 1000;
+    private static int THREES = 3000;
+    private File image;
 
-    private static int ONE_SECOND = 1000;  // 1000 milliseconds
-    private static int THREE_SECONDS = 3000;  // 3000 milliseconds
+    @FXML
+    private void chooseImage(ActionEvent event) throws IOException {
+        Stage stage = (Stage) createBtn.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            openFile(file);
+        }
+    }
 
-    private static final long ONESECOND = 1000;  // one thousand milliseconds
+    private void openFile(File file) {
+        try{
+            image = file;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void createListing(ActionEvent event) throws IOException {
@@ -48,7 +71,7 @@ public class ListingController {
         try {
             space = SpaceUtils.getSpace();
             Auction qsTemplate = new Auction();
-            Auction qStatus = (Auction)space.take(qsTemplate,null, TWO_SECONDS);
+            Auction qStatus = (Auction)space.take(qsTemplate,null, TWOS);
 
             // if there is no QueueStatus object in the space then we can't do much, so print an error and exit
             if (qStatus == null){
@@ -63,7 +86,7 @@ public class ListingController {
             Double priceBTN = Double.parseDouble(listingBINPrice.getText());
             Double priceA = Double.parseDouble(listingAPrice.getText());
             UserSession user = UserSession.getInstance();
-            Lot newLot = new Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA);
+            Lot newLot = new Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, image);
             space.write( newLot, null, FOREVER);
 
             // update the QueueStatus object by incrementing the counter and write it back to the space
@@ -108,7 +131,7 @@ public class ListingController {
             // First we need to create the transaction object
             Transaction.Created trc = null;
             try {
-                trc = TransactionFactory.create(mgr, THREE_SECONDS);
+                trc = TransactionFactory.create(mgr, THREES);
             } catch (Exception e) {
                 System.out.println("Could not create transaction " + e);
             }
@@ -118,7 +141,7 @@ public class ListingController {
             // Now take the initial object back out of the space...
             try {
                 Lot template = new Lot(jobID);
-                Lot lot = (Lot) space.take(template, txn, ONE_SECOND);
+                Lot lot = (Lot) space.take(template, txn, ONES);
                 if (lot == null) {
                     System.out.println("Error - No object found in space");
                     txn.abort();
@@ -129,6 +152,63 @@ public class ListingController {
                 lot.Status = 3;
                 space.write(lot, txn, FOREVER);
                 Alerts.auctionAlert("You have accepted the bid your item has now sold!");
+            } catch (Exception e) {
+                System.out.println("Failed to read or write to space " + e);
+                txn.abort();
+                System.exit(1);
+            }
+
+            // ... and commit the transaction.
+            txn.commit();
+        } catch (Exception e) {
+            System.out.print("Transaction failed " + e);
+        }
+
+    }
+
+    public static void declineBid(int jobID){
+        if (System.getSecurityManager() == null)
+            System.setSecurityManager(new SecurityManager());
+
+        // Find the transaction manager on the network
+        TransactionManager mgr = SpaceUtils.getManager();
+        if (mgr == null) {
+            System.err.println("Failed to find the transaction manager");
+            System.exit(1);
+        }
+
+        //check for space
+        JavaSpace space = SpaceUtils.getSpace();
+        if (space == null) {
+            System.err.println("Failed to find the javaspace");
+            System.exit(1);
+        }
+
+        try {
+            // First we need to create the transaction object
+            Transaction.Created trc = null;
+            try {
+                trc = TransactionFactory.create(mgr, THREES);
+            } catch (Exception e) {
+                System.out.println("Could not create transaction " + e);
+            }
+
+            Transaction txn = trc.transaction;
+
+            // Now take the initial object back out of the space...
+            try {
+                Lot template = new Lot(jobID);
+                Lot lot = (Lot) space.take(template, txn, ONES);
+                if (lot == null) {
+                    System.out.println("Error - No object found in space");
+                    txn.abort();
+                    System.exit(1);
+                }
+
+                // ... edit that object and write it back again...
+                lot.Status = 0;
+                space.write(lot, txn, FOREVER);
+                Alerts.auctionAlert("You have declined the bid!");
             } catch (Exception e) {
                 System.out.println("Failed to read or write to space " + e);
                 txn.abort();

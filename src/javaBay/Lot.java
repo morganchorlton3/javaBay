@@ -2,12 +2,15 @@ package javaBay;
 
 import net.jini.core.entry.Entry;
 
+import java.io.File;
+
 public class Lot implements Entry {
     // Variables
     private static Lot instance;
     public Integer lotNumber, userID, Status;
     public String lotName, lotDescription, userName;
     public Double BINprice, currentAprice, startAprice;
+    public File lotImage;
 
     // No arg contructor
     public Lot (){
@@ -28,7 +31,7 @@ public class Lot implements Entry {
     }
 
     // Arg constructor
-    public Lot (int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA){
+    public Lot (int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, File image){
         lotNumber = job;
         lotName = name;
         lotDescription = description;
@@ -37,6 +40,7 @@ public class Lot implements Entry {
         BINprice = priceBIN;
         currentAprice = priceA;
         startAprice = priceA;
+        lotImage = image;
         Status = 0;
     }
 
@@ -57,9 +61,9 @@ public class Lot implements Entry {
         instance = null;
     }
 
-    public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA) {
+    public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, File image) {
         if(instance == null) {
-            instance = new Lot(job, name, description,userId,nameUser, priceBIN, priceA);
+            instance = new Lot(job, name, description,userId,nameUser, priceBIN, priceA, image);
         }
         return instance;
     }

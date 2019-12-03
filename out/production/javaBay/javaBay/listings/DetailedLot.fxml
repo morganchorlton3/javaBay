@@ -11,18 +11,24 @@
 <?import javafx.scene.text.*?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="javaBay.listings.DetailedLotController">
 <center>
     <VBox spacing="10">
         <padding>
             <Insets left="20.0" right="30" top="10.0" bottom="30.0"/>
         </padding>
-        <Text fx:id="lotName" strokeType="OUTSIDE" strokeWidth="0.0" text="name" />
-        <Text fx:id="lotDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
-        <Text fx:id="lotBINPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
-        <Text fx:id="lotCurrentAPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
-        <Text fx:id="lotStartAPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
-        <Button fx:id="back" mnemonicParsing="false" onAction="#backHome" text="Back Home" />
+        <HBox spacing="30">
+            <VBox spacing="10">
+                <Text fx:id="lotName" strokeType="OUTSIDE" strokeWidth="0.0" text="name" />
+                <Text fx:id="lotDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
+                <Text fx:id="lotBINPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
+                <Text fx:id="lotCurrentAPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
+                <Text fx:id="lotStartAPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
+                <Button fx:id="back" mnemonicParsing="false" onAction="#backHome" text="Back Home" />
+            </VBox>
+            <ImageView fx:id="lotImage" fitWidth="200" fitHeight="200"></ImageView>
+        </HBox>
         <HBox>
             <TextField prefWidth="200" GridPane.rowIndex="0" GridPane.columnIndex="1" fx:id="bidValue"></TextField>
             <Button mnemonicParsing="false" onAction="#placeBid" text="Place bid" fx:id="placeBid" />
