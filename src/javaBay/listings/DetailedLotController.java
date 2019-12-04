@@ -63,8 +63,7 @@ public class DetailedLotController {
             placeBid.setDisable(true);
         }
         lotName.setText("Lot Name: " + currentLot.lotName);
-        Image lotImg = new Image(currentLot.lotImage.toURI().toString());
-        lotImage.setImage(lotImg);
+        //lotImage.setImage(listing.lotImage);
         lotDescription.setText("Lot Description: " + currentLot.lotDescription);
         lotBINPrice.setText("Buy It Now Price: " + currentLot.BINprice.toString());
         lotCurrentAPrice.setText("Current Auction Price: " + currentLot.currentAprice.toString());

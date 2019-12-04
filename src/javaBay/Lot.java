@@ -1,5 +1,6 @@
 package javaBay;
 
+import javafx.scene.image.Image;
 import net.jini.core.entry.Entry;
 
 import java.io.File;
@@ -10,7 +11,7 @@ public class Lot implements Entry {
     public Integer lotNumber, userID, Status;
     public String lotName, lotDescription, userName;
     public Double BINprice, currentAprice, startAprice;
-    public File lotImage;
+    public Image lotImage;
 
     // No arg contructor
     public Lot (){
@@ -31,7 +32,7 @@ public class Lot implements Entry {
     }
 
     // Arg constructor
-    public Lot (int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, File image){
+    public Lot (int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, Image image){
         lotNumber = job;
         lotName = name;
         lotDescription = description;
@@ -61,7 +62,7 @@ public class Lot implements Entry {
         instance = null;
     }
 
-    public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, File image) {
+    public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, Image image) {
         if(instance == null) {
             instance = new Lot(job, name, description,userId,nameUser, priceBIN, priceA, image);
         }

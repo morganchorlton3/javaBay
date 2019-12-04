@@ -5,6 +5,7 @@ import javaBay.Auction;
 import javaBay.Lot;
 import javaBay.SpaceUtils;
 import javaBay.auth.UserSession;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,19 +13,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import net.jini.core.lease.Lease;
+
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
 
 import static net.jini.core.lease.Lease.FOREVER;
 
@@ -44,7 +48,7 @@ public class ListingController {
     private static int ONES = 1000;
     private static final long TWOS = 2 * 1000;
     private static int THREES = 3000;
-    private File image;
+    private File imageFile;
 
     @FXML
     private void chooseImage(ActionEvent event) throws IOException {
@@ -57,7 +61,7 @@ public class ListingController {
 
     private void openFile(File file) {
         try{
-            image = file;
+            imageFile = file;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -86,7 +90,9 @@ public class ListingController {
             Double priceBTN = Double.parseDouble(listingBINPrice.getText());
             Double priceA = Double.parseDouble(listingAPrice.getText());
             UserSession user = UserSession.getInstance();
-            Lot newLot = new Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, image);
+            //Image
+            Image lotImg = new Image(String.valueOf(imageFile.toURI()));
+            Lot newLot = new Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, lotImg);
             space.write( newLot, null, FOREVER);
 
             // update the QueueStatus object by incrementing the counter and write it back to the space
