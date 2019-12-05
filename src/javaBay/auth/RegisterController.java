@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -74,21 +75,30 @@ public class RegisterController {
             String name = username.getText();
             String userEmail = email.getText();
             String userPassword = password.getText();
+            String userPasswordConfirm = confirm_password.getText();
             User newUser = new User(id, name, userEmail, userPassword);
-            space.write(newUser, null, Lease.FOREVER);
+            User ifExistsTemplate = new User(userEmail);
+            User ifExists = (User) space.readIfExists(ifExistsTemplate, null, TWO_MINUTES);
+            if (!userPassword.equals(userPasswordConfirm)){
+                Alerts.userAlert("Your passwords don't match");
+            }else if(ifExists != null){
+                Alerts.userAlert("A user has already been registered with that email");
+            }else{
+                space.write(newUser, null, Lease.FOREVER);
 
-            // update the QueueStatus object by incrementing the counter and write it back to the space
-            authStatus.addItem();
-            space.write(authStatus, null, Lease.FOREVER);
-            Alerts.auctionAlert("User registered please login");
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
-                Stage stage = (Stage) registerBtn.getScene().getWindow();
-                stage.setScene(new Scene(root, 1200, 720));
-            } catch (Exception e) {
-                e.printStackTrace();
-                Alerts.auctionAlert("Error loading Home page");
+                // update the QueueStatus object by incrementing the counter and write it back to the space
+                authStatus.addItem();
+                space.write(authStatus, null, Lease.FOREVER);
+                Alerts.auctionAlert("User registered please login");
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
+                    Stage stage = (Stage) registerBtn.getScene().getWindow();
+                    stage.setScene(new Scene(root, 1200, 720));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Alerts.auctionAlert("Error loading Home page");
 
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
