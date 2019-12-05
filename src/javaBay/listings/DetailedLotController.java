@@ -4,6 +4,7 @@ import javaBay.Alerts;
 import javaBay.Lot;
 import javaBay.SpaceUtils;
 import javaBay.auth.UserSession;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,9 @@ import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.regex.Matcher;
@@ -49,7 +53,7 @@ public class DetailedLotController {
     private static int THREE_SECONDS = 3000;  // 3000 milliseconds
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         Lot listing = Lot.getInstance();
         JavaSpace space = SpaceUtils.getSpace();
         Lot template = new Lot(listing.lotNumber);
@@ -63,7 +67,10 @@ public class DetailedLotController {
             placeBid.setDisable(true);
         }
         lotName.setText("Lot Name: " + currentLot.lotName);
-        //lotImage.setImage(listing.lotImage);
+        ByteArrayInputStream bis = new ByteArrayInputStream(currentLot.lotImage);
+        BufferedImage bImage= ImageIO.read(bis);
+        Image image = SwingFXUtils.toFXImage(bImage, null);
+        lotImage.setImage(image);
         lotDescription.setText("Lot Description: " + currentLot.lotDescription);
         lotBINPrice.setText("Buy It Now Price: " + currentLot.BINprice.toString());
         lotCurrentAPrice.setText("Current Auction Price: " + currentLot.currentAprice.toString());

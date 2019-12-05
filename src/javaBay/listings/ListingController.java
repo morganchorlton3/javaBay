@@ -5,7 +5,6 @@ import javaBay.Auction;
 import javaBay.Lot;
 import javaBay.SpaceUtils;
 import javaBay.auth.UserSession;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,19 +15,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import javafx.scene.image.Image;
+import java.util.Base64;
 
-import javax.imageio.ImageIO;
 
 import static net.jini.core.lease.Lease.FOREVER;
 
@@ -91,7 +90,11 @@ public class ListingController {
             Double priceA = Double.parseDouble(listingAPrice.getText());
             UserSession user = UserSession.getInstance();
             //Image
-            Image lotImg = new Image(String.valueOf(imageFile.toURI()));
+            BufferedImage image = ImageIO.read(imageFile);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", outputStream);
+            byte[] lotImg = outputStream.toByteArray();
+            //create Lot
             Lot newLot = new Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, lotImg);
             space.write( newLot, null, FOREVER);
 
