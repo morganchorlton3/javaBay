@@ -1,39 +1,37 @@
 package javaBay;
 
 
-import javaBay.listings.lotImage;
-import javafx.scene.image.Image;
 import net.jini.core.entry.Entry;
 
 
-public class Lot implements Entry {
+public class U1753026_Lot implements Entry {
     // Variables
-    private static Lot instance;
+    private static U1753026_Lot instance;
     public Integer lotNumber, userID, Status;
     public String lotName, lotDescription, userName;
     public Double BINprice, currentAprice, startAprice;
     public byte[] lotImage;
 
     // No arg contructor
-    public Lot (){
+    public U1753026_Lot(){
     }
 
 
-    public Lot (int lotNo){
+    public U1753026_Lot(int lotNo){
         lotNumber = lotNo;
     }
 
-    public Lot (int lotNo, int user){
+    public U1753026_Lot(int lotNo, int user){
         lotNumber = lotNo;
         userID = user;
     }
 
-    public Lot (String name){
+    public U1753026_Lot(String name){
         lotName = name;
     }
 
     // Arg constructor
-    public Lot (int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, byte[] image) {
+    public U1753026_Lot(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, byte[] image) {
         lotNumber = job;
         lotName = name;
         lotDescription = description;
@@ -55,7 +53,7 @@ public class Lot implements Entry {
         lotNumber++;
     }
 
-    public static Lot getInstance() {
+    public static U1753026_Lot getInstance() {
         return instance;
     }
 
@@ -63,9 +61,9 @@ public class Lot implements Entry {
         instance = null;
     }
 
-    public static Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, byte[] image) {
+    public static U1753026_Lot getInstace(int job, String name, String description, int userId, String nameUser, Double priceBIN, Double priceA, byte[] image) {
         if(instance == null) {
-            instance = new Lot(job, name, description,userId,nameUser, priceBIN, priceA, image);
+            instance = new U1753026_Lot(job, name, description,userId,nameUser, priceBIN, priceA, image);
         }
         return instance;
     }

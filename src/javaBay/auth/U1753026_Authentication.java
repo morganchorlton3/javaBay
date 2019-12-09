@@ -2,15 +2,15 @@ package javaBay.auth;
 
 import net.jini.core.entry.Entry;
 
-public class Authentication implements Entry {
+public class U1753026_Authentication implements Entry {
     // Variables
     public Integer nextUser;
 
     // No arg contructor
-    public Authentication (){
+    public U1753026_Authentication(){
     }
 
-    public Authentication(int n){
+    public U1753026_Authentication(int n){
         // set count to n
         nextUser = n;
     }

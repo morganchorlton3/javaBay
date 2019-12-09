@@ -1,7 +1,7 @@
 package javaBay.listings;
 
 import javaBay.Alerts;
-import javaBay.Lot;
+import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
 import javaBay.auth.UserSession;
 import javafx.collections.FXCollections;
@@ -44,8 +44,8 @@ public class UserListingController {
                 UserSession user = UserSession.getInstance();
                 int userID = user.getUserID();
                 System.out.println(userID);
-                Lot template = new Lot(jobcounter);
-                Lot result = (Lot) space.read(template, null, TWO_SECONDS);
+                U1753026_Lot template = new U1753026_Lot(jobcounter);
+                U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWO_SECONDS);
                 System.out.println(result.toString());
                 if(result.userID != userID){
                     jobcounter++;
@@ -89,12 +89,12 @@ public class UserListingController {
         String selectedLot = (String) activeUserListings.getSelectionModel().getSelectedItems().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        Lot template = new Lot(selectedLot);
+        U1753026_Lot template = new U1753026_Lot(selectedLot);
         try {
             space = SpaceUtils.getSpace();
-            Lot result = (Lot) space.read(template, null, TWO_SECONDS);
-            Lot.emptyInstance();
-            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
+            U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWO_SECONDS);
+            U1753026_Lot.emptyInstance();
+            U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("UpdateUserListing.fxml"));
                 Stage stage = (Stage) viewListingBtn.getScene().getWindow();
@@ -113,12 +113,12 @@ public class UserListingController {
         String selectedLot = (String) bidsToAcceptListings.getSelectionModel().getSelectedItems().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        Lot template = new Lot(selectedLot);
+        U1753026_Lot template = new U1753026_Lot(selectedLot);
         try {
             space = SpaceUtils.getSpace();
-            Lot result = (Lot) space.read(template, null, TWO_SECONDS);
-            Lot.emptyInstance();
-            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
+            U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWO_SECONDS);
+            U1753026_Lot.emptyInstance();
+            U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
             try {
                 Alerts.bidToAccept(result);
                 Parent root = FXMLLoader.load(getClass().getResource("UserListings.fxml"));

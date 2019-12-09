@@ -2,15 +2,15 @@ package javaBay;
 
 import net.jini.core.entry.Entry;
 
-public class Auction implements Entry {
+public class U1753026_Auction implements Entry {
     // Variables
     public Integer nextItem;
 
     // No arg contructor
-    public Auction (){
+    public U1753026_Auction(){
     }
 
-    public Auction (int n){
+    public U1753026_Auction(int n){
         // set count to n
         nextItem = n;
     }

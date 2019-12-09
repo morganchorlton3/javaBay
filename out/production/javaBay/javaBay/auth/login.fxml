@@ -28,7 +28,7 @@
             <Button prefWidth="100" defaultButton="true"
                     text="Back" alignment="CENTER" fx:id="backBTN" onAction="#backBtn"></Button>
             <Button prefWidth="100" defaultButton="true"
-                    text="Login" alignment="CENTER" fx:id="loginBtn" onAction="#loginUser"></Button>
+                    text="Login" alignment="CENTER" fx:id="loginBtn" onAction="#HandleloginUser"></Button>
         </children>
     </HBox>
 </GridPane>

@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="javaBay:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/javaBay_jar</output-path>
+    <root id="archive" name="javaBay.jar">
+      <element id="module-output" name="javaBay" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/apache-river-3.0.0/lib/jsk-lib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/apache-river-3.0.0/lib-dl/reggie-dl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/apache-river-3.0.0/lib/outrigger.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/apache-river-3.0.0/lib/reggie.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/apache-river-3.0.0/lib/jsk-platform.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

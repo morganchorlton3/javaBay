@@ -1,6 +1,6 @@
 package javaBay.listings;
 
-import javaBay.Lot;
+import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
 import javaBay.auth.UserSession;
 import net.jini.core.event.RemoteEvent;
@@ -39,7 +39,7 @@ public class ListingNotify implements RemoteEventListener {
             UserSession user = UserSession.getInstance();
             int userID = user.getUserID();
             // add the listener
-            Lot template = new Lot(jobID, userID);
+            U1753026_Lot template = new U1753026_Lot(jobID, userID);
             space.notify(template, null, this.theStub, Lease.FOREVER, null);
 
         } catch (Exception e) {
@@ -51,10 +51,10 @@ public class ListingNotify implements RemoteEventListener {
         // this is the method called when we are notified
         // of an object of interest
         // add the listener
-        Lot listingToNotify = Lot.getInstance();
-        Lot template = new Lot(listingToNotify.lotNumber, listingToNotify.userID);
+        U1753026_Lot listingToNotify = U1753026_Lot.getInstance();
+        U1753026_Lot template = new U1753026_Lot(listingToNotify.lotNumber, listingToNotify.userID);
         try {
-            Lot listing = (Lot)space.readIfExists(template, null, Long.MAX_VALUE);
+            U1753026_Lot listing = (U1753026_Lot)space.readIfExists(template, null, Long.MAX_VALUE);
             System.out.println("----- LISTING NOTIFY -----");
             System.out.println(listing.lotName);
         } catch (Exception e) {

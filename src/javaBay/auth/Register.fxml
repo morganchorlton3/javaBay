@@ -45,7 +45,7 @@
       <Button prefWidth="100" defaultButton="true"
               text="Back" alignment="CENTER" fx:id="backBTN" onAction="#backBtn"></Button>
       <Button prefWidth="100" defaultButton="true"
-              text="Register" alignment="CENTER" fx:id="registerBtn" onAction="#registerUser"></Button>
+              text="Register" alignment="CENTER" fx:id="registerBtn" onAction="#HandleRegisterUser"></Button>
     </children>
   </HBox>
 </GridPane>

@@ -1,9 +1,8 @@
 package javaBay.listings;
 
 import javaBay.Alerts;
-import javaBay.Lot;
+import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
-import javaBay.auth.UserSession;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,9 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionException;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace;
@@ -27,16 +24,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static net.jini.core.lease.Lease.FOREVER;
 
 public class DetailedLotController {
 
     private static JavaSpace space;
-    private Lot currentLot;
+    private U1753026_Lot currentU1753026Lot;
     private static final long TWO_MINUTES = 2 * 1000 * 60;
 
     @FXML
@@ -54,27 +48,27 @@ public class DetailedLotController {
 
     @FXML
     public void initialize() throws IOException {
-        Lot listing = Lot.getInstance();
+        U1753026_Lot listing = U1753026_Lot.getInstance();
         JavaSpace space = SpaceUtils.getSpace();
-        Lot template = new Lot(listing.lotNumber);
+        U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
         try {
-            currentLot = (Lot) space.read(template, null, TWO_MINUTES);
+            currentU1753026Lot = (U1753026_Lot) space.read(template, null, TWO_MINUTES);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (currentLot.Status == 2){
+        if (currentU1753026Lot.Status == 2){
             bidValue.setDisable(true);
             placeBid.setDisable(true);
         }
-        lotName.setText("Lot Name: " + currentLot.lotName);
-        ByteArrayInputStream bis = new ByteArrayInputStream(currentLot.lotImage);
+        lotName.setText("Lot Name: " + currentU1753026Lot.lotName);
+        ByteArrayInputStream bis = new ByteArrayInputStream(currentU1753026Lot.lotImage);
         BufferedImage bImage= ImageIO.read(bis);
         Image image = SwingFXUtils.toFXImage(bImage, null);
         lotImage.setImage(image);
-        lotDescription.setText("Lot Description: " + currentLot.lotDescription);
-        lotBINPrice.setText("Buy It Now Price: " + currentLot.BINprice.toString());
-        lotCurrentAPrice.setText("Current Auction Price: " + currentLot.currentAprice.toString());
-        lotStartAPrice.setText("Start Auction Price: " + currentLot.startAprice.toString());
+        lotDescription.setText("Lot Description: " + currentU1753026Lot.lotDescription);
+        lotBINPrice.setText("Buy It Now Price: " + currentU1753026Lot.BINprice.toString());
+        lotCurrentAPrice.setText("Current Auction Price: " + currentU1753026Lot.currentAprice.toString());
+        lotStartAPrice.setText("Start Auction Price: " + currentU1753026Lot.startAprice.toString());
 
     }
 
@@ -90,7 +84,7 @@ public class DetailedLotController {
     }
     @FXML
     private void placeBid(ActionEvent event) throws IOException {
-        Lot listing = Lot.getInstance();
+        U1753026_Lot listing = U1753026_Lot.getInstance();
         if(bidValue.getText().matches("[a-zA-Z]+")){
             Alerts.userAlert("Your Bid can only contain numbers");
         }else if(Double.parseDouble(bidValue.getText()) < listing.startAprice){
@@ -111,7 +105,7 @@ public class DetailedLotController {
     }
 
     public void placeBid(Double bid){
-        Lot listing = Lot.getInstance();
+        U1753026_Lot listing = U1753026_Lot.getInstance();
         if (System.getSecurityManager() == null)
             System.setSecurityManager(new SecurityManager());
 
@@ -142,19 +136,19 @@ public class DetailedLotController {
 
             // Now take the initial object back out of the space...
             try {
-                Lot template = new Lot(listing.lotNumber);
-                Lot lot = (Lot) space.take(template, txn, ONE_SECOND);
-                if (lot == null) {
+                U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
+                U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, ONE_SECOND);
+                if (u1753026Lot == null) {
                     System.out.println("Error - No object found in space");
                     txn.abort();
                     System.exit(1);
                 }
 
                 // ... edit that object and write it back again...
-                lot.currentAprice = bid;
-                lot.Status = 1;
-                space.write(lot, txn, FOREVER);
-                Alerts.auctionAlert("You have placed a bid with the value of: " + lot.currentAprice);
+                u1753026Lot.currentAprice = bid;
+                u1753026Lot.Status = 1;
+                space.write(u1753026Lot, txn, FOREVER);
+                Alerts.auctionAlert("You have placed a bid with the value of: " + u1753026Lot.currentAprice);
                 lotCurrentAPrice.setText("Current Auction Price: " + bid.toString());
                 bidValue.clear();
             } catch (Exception e) {
@@ -171,7 +165,7 @@ public class DetailedLotController {
     }
 
     public void buyItNow(){
-        Lot listing = Lot.getInstance();
+        U1753026_Lot listing = U1753026_Lot.getInstance();
         if (System.getSecurityManager() == null)
             System.setSecurityManager(new SecurityManager());
 
@@ -202,18 +196,18 @@ public class DetailedLotController {
 
             // Now take the initial object back out of the space...
             try {
-                Lot template = new Lot(listing.lotNumber);
-                Lot lot = (Lot) space.take(template, txn, ONE_SECOND);
-                if (lot == null) {
+                U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
+                U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, ONE_SECOND);
+                if (u1753026Lot == null) {
                     System.out.println("Error - No object found in space");
                     txn.abort();
                     System.exit(1);
                 }
 
                 // ... edit that object and write it back again...
-                lot.Status = 2;
-                space.write(lot, txn, FOREVER);
-                Alerts.auctionAlert("You have successfully bought this item for: " + lot.BINprice);
+                u1753026Lot.Status = 2;
+                space.write(u1753026Lot, txn, FOREVER);
+                Alerts.auctionAlert("You have successfully bought this item for: " + u1753026Lot.BINprice);
             } catch (Exception e) {
                 System.out.println("Failed to read or write to space " + e);
                 txn.abort();

@@ -128,14 +128,14 @@ public class HomeController {
         String selectedLot= (String) userListings.getSelectionModel().getSelectedItems().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        Lot template = new Lot(selectedLot);
+        U1753026_Lot template = new U1753026_Lot(selectedLot);
         try {
             space = SpaceUtils.getSpace();
-            Lot result = (Lot) space.read(template, null, TWOS);
+            U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWOS);
             //clear instance in case it has already been used
-            Lot.emptyInstance();
+            U1753026_Lot.emptyInstance();
             //set lot instance to be used in next window
-            Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
+            U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
             //load new window
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
@@ -157,8 +157,8 @@ public class HomeController {
                 space = SpaceUtils.getSpace();
                 UserSession user = UserSession.getInstance();
                 int userID = user.getUserID();
-                Lot template = new Lot(jobCounter);
-                Lot result = (Lot) space.readIfExists(template, null, TWOS);
+                U1753026_Lot template = new U1753026_Lot(jobCounter);
+                U1753026_Lot result = (U1753026_Lot) space.readIfExists(template, null, TWOS);
                 if(result.userID == userID){
                     new ListingNotify(result.lotNumber);
                 }

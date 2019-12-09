@@ -1,13 +1,11 @@
 package javaBay;
 
-import javaBay.auth.Authentication;
-import javaBay.listings.ListingNotify;
+import javaBay.auth.U1753026_Authentication;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import net.jini.core.lease.Lease;
@@ -46,14 +44,14 @@ public class Main extends Application {
             System.err.println("Failed to find the javaspace");
             System.exit(1);
         }
-        Auction template = new Auction();
+        U1753026_Auction template = new U1753026_Auction();
         try {
-            Auction returnedObject = (Auction)space.readIfExists(template,null, ONESECOND);
+            U1753026_Auction returnedObject = (U1753026_Auction)space.readIfExists(template,null, ONESECOND);
             if (returnedObject == null) {
                 // there is no object in the space, so create one
                 try {
-                    Auction auctionStatus = new Auction(0);
-                    space.write(auctionStatus, null, Lease.FOREVER);
+                    U1753026_Auction u1753026AuctionStatus = new U1753026_Auction(0);
+                    space.write(u1753026AuctionStatus, null, Lease.FOREVER);
                     //System.out.println(template.getClass().getName() + " object added to space");
                     Alerts.auctionAlert("Object Added to Space");
                 } catch (Exception e) {
@@ -75,13 +73,13 @@ public class Main extends Application {
             System.err.println("Failed to find the javaspace");
             System.exit(1);
         }
-        Authentication template = new Authentication();
+        U1753026_Authentication template = new U1753026_Authentication();
         try {
-            Authentication returnedObject = (Authentication) space.readIfExists(template,null, ONESECOND);
+            U1753026_Authentication returnedObject = (U1753026_Authentication) space.readIfExists(template,null, ONESECOND);
             if (returnedObject == null) {
                 // there is no object in the space, so create one
                 try {
-                    Authentication auctionStatus = new Authentication(0);
+                    U1753026_Authentication auctionStatus = new U1753026_Authentication(0);
                     space.write(auctionStatus, null, Lease.FOREVER);
                     //System.out.println(template.getClass().getName() + " object added to space");
                     Alerts.userAlert("Authentication service started started");

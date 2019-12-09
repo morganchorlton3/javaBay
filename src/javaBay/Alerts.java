@@ -16,7 +16,7 @@ public class Alerts {
 
         alert.show();
     }
-    public static void bidToAccept(Lot listing){
+    public static void bidToAccept(U1753026_Lot listing){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Bid");
         alert.setHeaderText("Confirm Bid of " + listing.currentAprice.toString());

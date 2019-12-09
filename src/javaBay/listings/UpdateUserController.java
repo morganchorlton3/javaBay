@@ -1,7 +1,7 @@
 package javaBay.listings;
 
 import javaBay.Alerts;
-import javaBay.Lot;
+import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
@@ -23,7 +22,7 @@ import static net.jini.core.lease.Lease.FOREVER;
 
 public class UpdateUserController {
     private static JavaSpace space;
-    private Lot currentLot;
+    private U1753026_Lot currentU1753026Lot;
     private static final long TWO_MINUTES = 2 * 1000 * 60;
 
     private static int ONE_SECOND = 1000;  // 1000 milliseconds
@@ -49,26 +48,26 @@ public class UpdateUserController {
 
     @FXML
     public void initialize() {
-        Lot listing = Lot.getInstance();
+        U1753026_Lot listing = U1753026_Lot.getInstance();
         JavaSpace space = SpaceUtils.getSpace();
-        Lot template = new Lot(listing.lotNumber);
+        U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
         try {
-            currentLot = (Lot) space.read(template, null, TWO_MINUTES);
+            currentU1753026Lot = (U1753026_Lot) space.read(template, null, TWO_MINUTES);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (currentLot.currentAprice > currentLot.startAprice){
+        if (currentU1753026Lot.currentAprice > currentU1753026Lot.startAprice){
             lotStartAPrice.setDisable(true);
         }
-        lotName.setText(currentLot.lotName);
-        lotDescription.setText(currentLot.lotDescription);
-        lotBINPrice.setText(currentLot.BINprice.toString());
-        lotStartAPrice.setText(currentLot.startAprice.toString());
+        lotName.setText(currentU1753026Lot.lotName);
+        lotDescription.setText(currentU1753026Lot.lotDescription);
+        lotBINPrice.setText(currentU1753026Lot.BINprice.toString());
+        lotStartAPrice.setText(currentU1753026Lot.startAprice.toString());
     }
 
     @FXML
     public void updateListing(){
-        Lot listing = Lot.getInstance();
+        U1753026_Lot listing = U1753026_Lot.getInstance();
         if (System.getSecurityManager() == null)
             System.setSecurityManager(new SecurityManager());
 
@@ -99,23 +98,23 @@ public class UpdateUserController {
 
             // Now take the initial object back out of the space...
             try {
-                Lot template = new Lot(listing.lotNumber);
-                Lot lot = (Lot) space.take(template, txn, ONE_SECOND);
-                if (lot == null) {
+                U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
+                U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, ONE_SECOND);
+                if (u1753026Lot == null) {
                     System.out.println("Error - No object found in space");
                     txn.abort();
                     System.exit(1);
                 }
 
                 // ... edit that object and write it back again...
-                lot.lotName = lotName.getText();
-                lot.lotDescription = lotDescription.getText();
-                lot.BINprice = Double.parseDouble(lotBINPrice.getText());
-                if( lot.currentAprice == lot.startAprice){
-                    lot.startAprice = Double.parseDouble(lotStartAPrice.getText());
-                    lot.currentAprice = Double.parseDouble(lotStartAPrice.getText());
+                u1753026Lot.lotName = lotName.getText();
+                u1753026Lot.lotDescription = lotDescription.getText();
+                u1753026Lot.BINprice = Double.parseDouble(lotBINPrice.getText());
+                if( u1753026Lot.currentAprice == u1753026Lot.startAprice){
+                    u1753026Lot.startAprice = Double.parseDouble(lotStartAPrice.getText());
+                    u1753026Lot.currentAprice = Double.parseDouble(lotStartAPrice.getText());
                 }
-                space.write(lot, txn, FOREVER);
+                space.write(u1753026Lot, txn, FOREVER);
                 Alerts.auctionAlert("Lot Updated");
             } catch (Exception e) {
                 System.out.println("Failed to read or write to space " + e);
