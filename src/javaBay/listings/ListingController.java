@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
@@ -75,7 +76,7 @@ public class ListingController {
             U1753026_Auction qStatus = (U1753026_Auction)space.take(qsTemplate,null, TWOS);
 
             // if there is no QueueStatus object in the space then we can't do much, so print an error and exit
-            if (qStatus == null){
+            if (qStatus == null) {
                 System.out.println("No " + qsTemplate.getClass().getName() + " object found.  Has 'StartPrintQueue' been run?");
                 System.exit(1);
             }
@@ -94,14 +95,13 @@ public class ListingController {
             byte[] lotImg = outputStream.toByteArray();
             //create Lot
             U1753026_Lot newU1753026Lot = new U1753026_Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, lotImg);
-            space.write(newU1753026Lot, null, FOREVER);
+            space.write(newU1753026Lot, null, Lease.FOREVER);
 
             // update the QueueStatus object by incrementing the counter and write it back to the space
             qStatus.addItem();
-            space.write( qStatus, null, FOREVER);
-            new ListingNotify(newU1753026Lot.lotNumber);
+            space.write( qStatus, null, Lease.FOREVER);
             Alerts.auctionAlert("Lot added to auction");
-
+            new ListingNotify(newU1753026Lot.lotNumber);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
                 Stage stage = (Stage) createBtn.getScene().getWindow();

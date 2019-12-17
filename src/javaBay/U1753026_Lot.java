@@ -21,9 +21,9 @@ public class U1753026_Lot implements Entry {
         lotNumber = lotNo;
     }
 
-    public U1753026_Lot(int lotNo, int user){
-        lotNumber = lotNo;
+    public U1753026_Lot( int user, int status){
         userID = user;
+        Status = status;
     }
 
     public U1753026_Lot(String name){

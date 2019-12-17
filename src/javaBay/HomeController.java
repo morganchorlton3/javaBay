@@ -176,10 +176,8 @@ public class HomeController {
                 int userID = user.getUserID();
                 U1753026_Lot template = new U1753026_Lot(jobCounter);
                 U1753026_Lot result = (U1753026_Lot) space.readIfExists(template, null, TWOS);
-                if(result.userID == userID){
-                    new ListingNotify(result.lotNumber);
-                }
-                if(result.Status == 1){
+
+                /*if(result.Status == 1){
                     //Lot has an active bid
                     if (result.userID == userID){
                         //If the user logged in display alert for bid to accept
@@ -191,7 +189,7 @@ public class HomeController {
                     userListings.getItems().add(result);
                     //setCell(result);
                     updateCell();
-                }else if (result.Status == 2 | result.Status == 3 ) {
+                }else */ if (result.Status == 2 | result.Status == 3 ) {
                     //Lot already purchased Don't show and go to next item
                     jobCounter++;
                 } else {

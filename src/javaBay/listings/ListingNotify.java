@@ -1,7 +1,9 @@
 package javaBay.listings;
 
+import javaBay.U1753026_Auction;
 import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
+import javaBay.auth.U1753026_Authentication;
 import javaBay.auth.UserSession;
 import net.jini.core.event.RemoteEvent;
 import net.jini.core.event.RemoteEventListener;

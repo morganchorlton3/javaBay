@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
@@ -127,7 +128,7 @@ public class DetailedLotController {
             // First we need to create the transaction object
             Transaction.Created trc = null;
             try {
-                trc = TransactionFactory.create(mgr, THREE_SECONDS);
+                trc = TransactionFactory.create(mgr, Lease.FOREVER);
             } catch (Exception e) {
                 System.out.println("Could not create transaction " + e);
             }
@@ -137,7 +138,7 @@ public class DetailedLotController {
             // Now take the initial object back out of the space...
             try {
                 U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
-                U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, ONE_SECOND);
+                U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, Lease.FOREVER);
                 if (u1753026Lot == null) {
                     System.out.println("Error - No object found in space");
                     txn.abort();
@@ -147,7 +148,7 @@ public class DetailedLotController {
                 // ... edit that object and write it back again...
                 u1753026Lot.currentAprice = bid;
                 u1753026Lot.Status = 1;
-                space.write(u1753026Lot, txn, FOREVER);
+                space.write(u1753026Lot, txn, Lease.FOREVER);
                 Alerts.auctionAlert("You have placed a bid with the value of: " + u1753026Lot.currentAprice);
                 lotCurrentAPrice.setText("Current Auction Price: " + bid.toString());
                 bidValue.clear();
@@ -156,7 +157,7 @@ public class DetailedLotController {
                 txn.abort();
                 System.exit(1);
             }
-
+            System.out.println("Bid Placed");
             // ... and commit the transaction.
             txn.commit();
         } catch (Exception e) {
