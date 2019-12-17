@@ -70,16 +70,9 @@ public class U1753026_Lot implements Entry {
 
     @Override
     public String toString() {
-        return "Lot{" +
-                "lotNumber=" + lotNumber +
-                ", userID=" + userID +
-                ", Status=" + Status +
-                ", lotName='" + lotName + '\'' +
-                ", lotDescription='" + lotDescription + '\'' +
-                ", userName='" + userName + '\'' +
-                ", BINprice=" + BINprice +
-                ", currentAprice=" + currentAprice +
-                ", startAprice=" + startAprice +
-                '}';
+        return "Name: " + lotName + '\n' +
+                "Buy It Now: " + BINprice + '\n' +
+                "Auction Price: " + currentAprice + '\n' +
+                "ID: " + lotNumber;
     }
 }

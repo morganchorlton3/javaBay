@@ -2,17 +2,28 @@ package javaBay;
 
 import javaBay.auth.UserSession;
 import javaBay.listings.ListingNotify;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.jini.space.JavaSpace;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class HomeController {
@@ -20,7 +31,7 @@ public class HomeController {
     Button startAuction, updateBtn, loginBtn, registerBtn, logoutBtn, ViewUserListingBtn, createListingBtn, viewListingBtn;
 
     @FXML
-    ListView userListings;
+    ListView<U1753026_Lot> userListings;
 
     @FXML
     Text userWelcome;
@@ -125,10 +136,16 @@ public class HomeController {
     //View Listing
     @FXML
     private void view(ActionEvent event) throws IOException {
-        String selectedLot= (String) userListings.getSelectionModel().getSelectedItems().stream()
+        //Get String from list view
+        String selectedLot = (String) userListings.getSelectionModel().getSelectedItems().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        U1753026_Lot template = new U1753026_Lot(selectedLot);
+        //manipulate String
+        //System.out.println(selectedLot);
+        String[] splitString = selectedLot.split("ID: ");
+        int selectedItemID  = Integer.parseInt(splitString[1]);
+
+        U1753026_Lot template = new U1753026_Lot(selectedItemID);
         try {
             space = SpaceUtils.getSpace();
             U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWOS);
@@ -168,26 +185,89 @@ public class HomeController {
                         //If the user logged in display alert for bid to accept
                         Alerts.bidToAccept(result);
                     }
-                    //add lot to list view
-                    String lotToAdd = result.lotName;
-                    userListings.getItems().addAll(lotToAdd);
+                    //Increase Job Counter
                     jobCounter++;
+                    //Set cell inside list view with current lot
+                    userListings.getItems().add(result);
+                    //setCell(result);
+                    updateCell();
                 }else if (result.Status == 2 | result.Status == 3 ) {
                     //Lot already purchased Don't show and go to next item
                     jobCounter++;
                 } else {
                     //Add job to list view
+                    userListings.getItems().add(result);
+                    //setCell(result);
+                    updateCell();
                     jobCounter++;
-                    String lotToAdd = result.lotName;
-                    userListings.getItems().addAll(lotToAdd);
                 }
             } catch (Exception e) {
                 break;
             }
-
         }
 
     }
+    private void updateCell(){
+        userListings.setCellFactory((list) -> {
+            return new ListCell<U1753026_Lot>() {
+                private ImageView imageView = new ImageView();
+                @Override
+                protected void updateItem(U1753026_Lot item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) return;
+                    try {
+                        // get Image
+                        ByteArrayInputStream bis = new ByteArrayInputStream(item.lotImage);
+                        BufferedImage bImage = ImageIO.read(bis);
+                        Image image = SwingFXUtils.toFXImage(bImage, null);
+                        //Set Image inside List view
+                        imageView.setImage(image);
+                        //Set fixed width and height
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(150);
+                        //Update text in list view
+                        setGraphic(imageView);
+                        setText(item.toString());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            };
+        });
+    }
+    /*private void setCell(U1753026_Lot lot){
+        userListings.setCellFactory(param -> new ListCell<String>() {
+            private ImageView imageView = new ImageView();
+            @Override
+            public void updateItem(userListing item, boolean empty) {
+               // super.updateItem(lot.toString(), empty);
+                //System.out.println(name);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    try {
+                        // get Image
+                        ByteArrayInputStream bis = new ByteArrayInputStream(lot.lotImage);
+                        BufferedImage bImage = ImageIO.read(bis);
+                        Image image = SwingFXUtils.toFXImage(bImage, null);
+                        //Set Image inside List view
+                        imageView.setImage(image);
+                        //Set fixed width and height
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(150);
+                        //Update text in list view
+                        setText(name);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }*/
+
+
     //check if user is logged in
     private boolean checkAuthStatus(){
         UserSession user = UserSession.getInstance();

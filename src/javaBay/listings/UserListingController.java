@@ -6,16 +6,23 @@ import javaBay.SpaceUtils;
 import javaBay.auth.UserSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import net.jini.space.JavaSpace;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,18 +57,14 @@ public class UserListingController {
                 if(result.userID != userID){
                     jobcounter++;
                 }else if (result.Status == 0) {
-                    String lotToAdd = result.lotName;
-                    activeUserListings.getItems().addAll(lotToAdd);
+                    setCell(result, activeUserListings);
                     jobcounter++;
                 } else if (result.Status == 1){
-                    ///userListings.setText("Lot No: " + result.lotNumber + " Lot Name: " + result.lotName);
-                    String lotToAdd = result.lotName;
-                    bidsToAcceptListings.getItems().addAll(lotToAdd);
-                    activeUserListings.getItems().addAll(lotToAdd);
+                    setCell(result, bidsToAcceptListings);
+                    setCell(result, activeUserListings);
                     jobcounter++;
                 }else if(result.Status == 2 | result.Status == 3){
-                    String lotToAdd = result.lotName;
-                    boughtItems.getItems().addAll(lotToAdd);
+                    setCell(result, boughtItems);
                     jobcounter++;
                 }
             } catch (Exception e) {
@@ -89,7 +92,9 @@ public class UserListingController {
         String selectedLot = (String) activeUserListings.getSelectionModel().getSelectedItems().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        U1753026_Lot template = new U1753026_Lot(selectedLot);
+        String[] splitString = selectedLot.split("ID: ");
+        int selectedItemID  = Integer.parseInt(splitString[1]);
+        U1753026_Lot template = new U1753026_Lot(selectedItemID);
         try {
             space = SpaceUtils.getSpace();
             U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWO_SECONDS);
@@ -113,7 +118,10 @@ public class UserListingController {
         String selectedLot = (String) bidsToAcceptListings.getSelectionModel().getSelectedItems().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        U1753026_Lot template = new U1753026_Lot(selectedLot);
+
+        String[] splitString = selectedLot.split("ID: ");
+        int selectedItemID  = Integer.parseInt(splitString[1]);
+        U1753026_Lot template = new U1753026_Lot(selectedItemID);
         try {
             space = SpaceUtils.getSpace();
             U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWO_SECONDS);
@@ -131,6 +139,40 @@ public class UserListingController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setCell(U1753026_Lot lot, ListView listView){
+        String lotToAdd = lot.toString();
+        listView.getItems().addAll(lotToAdd);
+
+        listView.setCellFactory(param -> new ListCell<String>() {
+            private ImageView imageView = new ImageView();
+            @Override
+            public void updateItem(String name, boolean empty) {
+                super.updateItem(name, empty);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    try {
+                        // get Image
+                        ByteArrayInputStream bis = new ByteArrayInputStream(lot.lotImage);
+                        BufferedImage bImage = ImageIO.read(bis);
+                        Image image = SwingFXUtils.toFXImage(bImage, null);
+                        //Set Image inside List view
+                        imageView.setImage(image);
+                        //Set fixed width and height
+                        imageView.setFitWidth(60);
+                        imageView.setFitHeight(60);
+                        //Update text in list view
+                        setText(name);
+                        setGraphic(imageView);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
 }
