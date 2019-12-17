@@ -32,7 +32,7 @@ public class UserListingController {
     private JavaSpace space;
 
     @FXML
-    ListView activeUserListings, bidsToAcceptListings, boughtItems;
+    ListView<U1753026_Lot> activeUserListings, bidsToAcceptListings, boughtItems;
 
     @FXML
     Button backBtn, viewListingBtn;
@@ -57,14 +57,26 @@ public class UserListingController {
                 if(result.userID != userID){
                     jobcounter++;
                 }else if (result.Status == 0) {
-                    setCell(result, activeUserListings);
+                    //Add item to list
+                    activeUserListings.getItems().add(result);
+                    //Update with image
+                    updateCell(activeUserListings);
                     jobcounter++;
                 } else if (result.Status == 1){
-                    setCell(result, bidsToAcceptListings);
-                    setCell(result, activeUserListings);
+                    //Add item to list
+                    bidsToAcceptListings.getItems().add(result);
+                    //Update with image
+                    updateCell(bidsToAcceptListings);
+                    //Add item to list
+                    activeUserListings.getItems().add(result);
+                    //Update with image
+                    updateCell(activeUserListings);
                     jobcounter++;
                 }else if(result.Status == 2 | result.Status == 3){
-                    setCell(result, boughtItems);
+                    //Add item to list
+                    boughtItems.getItems().add(result);
+                    //Update with image
+                    updateCell(boughtItems);
                     jobcounter++;
                 }
             } catch (Exception e) {
@@ -142,8 +154,6 @@ public class UserListingController {
     }
 
     private void setCell(U1753026_Lot lot, ListView listView){
-        String lotToAdd = lot.toString();
-        listView.getItems().addAll(lotToAdd);
 
         listView.setCellFactory(param -> new ListCell<String>() {
             private ImageView imageView = new ImageView();
@@ -172,6 +182,34 @@ public class UserListingController {
                     }
                 }
             }
+        });
+    }
+    private void updateCell(ListView<U1753026_Lot> listView){
+        listView.setCellFactory((list) -> {
+            return new ListCell<U1753026_Lot>() {
+                private ImageView imageView = new ImageView();
+                @Override
+                protected void updateItem(U1753026_Lot item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) return;
+                    try {
+                        // get Image
+                        ByteArrayInputStream bis = new ByteArrayInputStream(item.lotImage);
+                        BufferedImage bImage = ImageIO.read(bis);
+                        Image image = SwingFXUtils.toFXImage(bImage, null);
+                        //Set Image inside List view
+                        imageView.setImage(image);
+                        //Set fixed width and height
+                        imageView.setFitWidth(60);
+                        imageView.setFitHeight(60);
+                        //Update text in list view
+                        setGraphic(imageView);
+                        setText(item.toString());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            };
         });
     }
 
