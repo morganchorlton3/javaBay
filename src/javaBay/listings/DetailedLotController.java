@@ -90,6 +90,8 @@ public class DetailedLotController {
             Alerts.userAlert("Your Bid can only contain numbers");
         }else if(Double.parseDouble(bidValue.getText()) < listing.startAprice){
             Alerts.userAlert("Your bid cant be lower than the current bid");
+        }else if(Double.parseDouble(bidValue.getText()) > listing.BINprice){
+            Alerts.userAlert("Your bid cant be higher than the buy it now price");
         }else{
             Double bid = Double.valueOf(bidValue.getText());
             placeBid(bid);
@@ -101,7 +103,7 @@ public class DetailedLotController {
         try {
             buyItNow();
         }catch (Exception e){
-            System.out.print("Transaction failed " + e);
+            Alerts.space("Transaction Failed");
         }
     }
 
@@ -113,15 +115,13 @@ public class DetailedLotController {
         // Find the transaction manager on the network
         TransactionManager mgr = SpaceUtils.getManager();
         if (mgr == null) {
-            System.err.println("Failed to find the transaction manager");
-            System.exit(1);
+            Alerts.space("Failed to create Transaction manager, please try again later");
         }
 
         //check for space
         JavaSpace space = SpaceUtils.getSpace();
         if (space == null) {
-            System.err.println("Failed to find the javaspace");
-            System.exit(1);
+            Alerts.space("Failed to find javaspace");
         }
 
         try {
@@ -130,7 +130,7 @@ public class DetailedLotController {
             try {
                 trc = TransactionFactory.create(mgr, Lease.FOREVER);
             } catch (Exception e) {
-                System.out.println("Could not create transaction " + e);
+                Alerts.space("Couldn't not create transaction");
             }
 
             Transaction txn = trc.transaction;
@@ -140,7 +140,7 @@ public class DetailedLotController {
                 U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
                 U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, Lease.FOREVER);
                 if (u1753026Lot == null) {
-                    System.out.println("Error - No object found in space");
+                    Alerts.space("Failed to find lot");
                     txn.abort();
                     System.exit(1);
                 }
@@ -153,15 +153,14 @@ public class DetailedLotController {
                 lotCurrentAPrice.setText("Current Auction Price: " + bid.toString());
                 bidValue.clear();
             } catch (Exception e) {
-                System.out.println("Failed to read or write to space " + e);
+                Alerts.space("Failed to read or write to space");
                 txn.abort();
                 System.exit(1);
             }
-            System.out.println("Bid Placed");
             // ... and commit the transaction.
             txn.commit();
         } catch (Exception e) {
-            System.out.print("Transaction failed " + e);
+            Alerts.space("Transaction Failed");
         }
     }
 
@@ -173,14 +172,14 @@ public class DetailedLotController {
         // Find the transaction manager on the network
         TransactionManager mgr = SpaceUtils.getManager();
         if (mgr == null) {
-            System.err.println("Failed to find the transaction manager");
+            Alerts.space("Failed to find Transaction Manager please check it is running");
             System.exit(1);
         }
 
         //check for space
         JavaSpace space = SpaceUtils.getSpace();
         if (space == null) {
-            System.err.println("Failed to find the javaspace");
+            Alerts.space("Failed to find space please check it is running");
             System.exit(1);
         }
 
@@ -190,7 +189,7 @@ public class DetailedLotController {
             try {
                 trc = TransactionFactory.create(mgr, THREE_SECONDS);
             } catch (Exception e) {
-                System.out.println("Could not create transaction " + e);
+                Alerts.space("Error Creating Transaction");
             }
 
             Transaction txn = trc.transaction;
@@ -200,9 +199,9 @@ public class DetailedLotController {
                 U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
                 U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, txn, ONE_SECOND);
                 if (u1753026Lot == null) {
-                    System.out.println("Error - No object found in space");
+                    Alerts.space("Failed to find the lot");
                     txn.abort();
-                    System.exit(1);
+                    Alerts.auctionAlert("Error Placing Bid");
                 }
 
                 // ... edit that object and write it back again...
@@ -210,7 +209,7 @@ public class DetailedLotController {
                 space.write(u1753026Lot, txn, FOREVER);
                 Alerts.auctionAlert("You have successfully bought this item for: " + u1753026Lot.BINprice);
             } catch (Exception e) {
-                System.out.println("Failed to read or write to space " + e);
+                Alerts.space("Failed to write to space");
                 txn.abort();
                 System.exit(1);
             }
@@ -225,7 +224,7 @@ public class DetailedLotController {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            System.out.print("Transaction failed " + e);
+            Alerts.space("Transaction Failed");
         }
     }
 

@@ -1,5 +1,6 @@
 package javaBay.listings;
 
+import javaBay.Alerts;
 import javaBay.U1753026_Auction;
 import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
@@ -24,28 +25,26 @@ public class ListingNotify implements RemoteEventListener {
         // find the space
         space = SpaceUtils.getSpace();
         if (space == null){
-            System.err.println("Failed to find the javaspace");
-            System.exit(1);
-        }
+            Alerts.space("Failed to find space please check it is running");
+        }else {
 
-        // create the exporter
-        Exporter myDefaultExporter =
-                new BasicJeriExporter(TcpServerEndpoint.getInstance(0),
-                        new BasicILFactory(), false, true);
+            // create the exporter
+            Exporter myDefaultExporter =
+                    new BasicJeriExporter(TcpServerEndpoint.getInstance(0),
+                            new BasicILFactory(), false, true);
 
-        try {
-            // register this as a remote object
-            // and get a reference to the 'stub'
-            theStub = (RemoteEventListener) myDefaultExporter.export(this);
+            try {
+                // register this as a remote object
+                // and get a reference to the 'stub'
+                theStub = (RemoteEventListener) myDefaultExporter.export(this);
 
-            UserSession user = UserSession.getInstance();
-            int userID = user.getUserID();
-            // add the listener
-            U1753026_Lot template = new U1753026_Lot(jobID, userID);
-            space.notify(template, null, this.theStub, Lease.FOREVER, null);
+                // add the listener
+                U1753026_Lot template = new U1753026_Lot(jobID);
+                space.notify(template, null, this.theStub, Lease.FOREVER, null);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -53,14 +52,6 @@ public class ListingNotify implements RemoteEventListener {
         // this is the method called when we are notified
         // of an object of interest
         // add the listener
-        U1753026_Lot listingToNotify = U1753026_Lot.getInstance();
-        U1753026_Lot template = new U1753026_Lot(listingToNotify.lotNumber, listingToNotify.userID);
-        try {
-            U1753026_Lot listing = (U1753026_Lot)space.readIfExists(template, null, Long.MAX_VALUE);
-            System.out.println("----- LISTING NOTIFY -----");
-            System.out.println(listing.lotName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("----- LISTING NOTIFY -----");
     }
 }

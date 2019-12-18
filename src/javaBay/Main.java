@@ -26,12 +26,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Java Bay");
         primaryStage.setScene(new Scene(root, 1200, 720));
         primaryStage.show();
         JavaSpace space = SpaceUtils.getSpace();
-        startAuthentication(space);
-        startAuction(space);
+        if (space == null){
+            Alerts.space("Failed to find space please check it is running");
+        }else{
+            startAuthentication(space);
+            startAuction(space);
+        }
     }
 
 
@@ -40,10 +44,6 @@ public class Main extends Application {
     }
 
     public static void startAuction(JavaSpace space){
-        if (space == null){
-            System.err.println("Failed to find the javaspace");
-            System.exit(1);
-        }
         U1753026_Auction template = new U1753026_Auction();
         try {
             U1753026_Auction returnedObject = (U1753026_Auction)space.readIfExists(template,null, ONESECOND);
@@ -69,10 +69,6 @@ public class Main extends Application {
     }
 
     public static void startAuthentication(JavaSpace space){
-        if (space == null){
-            System.err.println("Failed to find the javaspace");
-            System.exit(1);
-        }
         U1753026_Authentication template = new U1753026_Authentication();
         try {
             U1753026_Authentication returnedObject = (U1753026_Authentication) space.readIfExists(template,null, ONESECOND);

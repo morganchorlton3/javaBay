@@ -32,6 +32,22 @@ public class Alerts {
         }
     }
 
+    public static void space(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Space Error!");
+
+        // Header Text: null
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK){
+            System.exit(0);
+        }
+    }
+
+
     public static void userAlert(String message){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Authentication Alert");
