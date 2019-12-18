@@ -49,6 +49,8 @@
                        GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
             <Button fx:id="updateBtn" onAction="#updateListing" mnemonicParsing="false" text="Update" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Button fx:id="removeBtn" onAction="#removeListing" mnemonicParsing="false" text="Remove" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+
         </GridPane>
     </VBox>
 </center>

@@ -71,50 +71,86 @@ public class ListingController {
         String description = listingDescription.getText();
 
         try {
-            space = SpaceUtils.getSpace();
-            U1753026_Auction qsTemplate = new U1753026_Auction();
-            U1753026_Auction qStatus = (U1753026_Auction)space.take(qsTemplate,null, TWOS);
+            if(validateLot()) {
+                space = SpaceUtils.getSpace();
+                U1753026_Auction qsTemplate = new U1753026_Auction();
+                U1753026_Auction qStatus = (U1753026_Auction)space.take(qsTemplate,null, TWOS);
 
-            // if there is no QueueStatus object in the space then we can't do much, so print an error and exit
-            if (qStatus == null) {
-                System.out.println("No " + qsTemplate.getClass().getName() + " object found.  Has 'StartPrintQueue' been run?");
-                System.exit(1);
-            }
+                // if there is no QueueStatus object in the space then we can't do much, so print an error and exit
+                if (qStatus == null) {
+                    Alerts.auctionAlert("No Auction service running");
+                }
+                // create the new QueueItem, write it to the space, and update the GUI
+                int jobNumber = qStatus.nextItem;
+                String lotName = listingName.getText();
+                String lotDescription = listingDescription.getText();
+                Double priceBTN = Double.parseDouble(listingBINPrice.getText());
+                Double priceA = Double.parseDouble(listingAPrice.getText());
+                UserSession user = UserSession.getInstance();
+                //Image
+                BufferedImage image = ImageIO.read(imageFile);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ImageIO.write(image, "png", outputStream);
+                byte[] lotImg = outputStream.toByteArray();
+                //create Lot
+                U1753026_Lot newU1753026Lot = new U1753026_Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, lotImg);
+                space.write(newU1753026Lot, null, Lease.FOREVER);
 
-            // create the new QueueItem, write it to the space, and update the GUI
-            int jobNumber = qStatus.nextItem;
-            String lotName = listingName.getText();
-            String lotDescription = listingDescription.getText();
-            Double priceBTN = Double.parseDouble(listingBINPrice.getText());
-            Double priceA = Double.parseDouble(listingAPrice.getText());
-            UserSession user = UserSession.getInstance();
-            //Image
-            BufferedImage image = ImageIO.read(imageFile);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", outputStream);
-            byte[] lotImg = outputStream.toByteArray();
-            //create Lot
-            U1753026_Lot newU1753026Lot = new U1753026_Lot(jobNumber, lotName, lotDescription, user.getUserID(), user.getUserName(), priceBTN, priceA, lotImg);
-            space.write(newU1753026Lot, null, Lease.FOREVER);
+                // update the QueueStatus object by incrementing the counter and write it back to the space
+                qStatus.addItem();
+                space.write(qStatus, null, Lease.FOREVER);
+                Alerts.auctionAlert("Lot added to auction");
+                new ListingNotify(newU1753026Lot.lotNumber);
 
-            // update the QueueStatus object by incrementing the counter and write it back to the space
-            qStatus.addItem();
-            space.write( qStatus, null, Lease.FOREVER);
-            Alerts.auctionAlert("Lot added to auction");
-            new ListingNotify(newU1753026Lot.lotNumber);
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
-                Stage stage = (Stage) createBtn.getScene().getWindow();
-                stage.setScene(new Scene(root, 1200, 720));
-            }catch ( Exception e) {
-                e.printStackTrace();
-                Alerts.auctionAlert("Error loading login page");
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
+                    Stage stage = (Stage) createBtn.getScene().getWindow();
+                    stage.setScene(new Scene(root, 1200, 720));
+                }catch ( Exception e) {
+                    e.printStackTrace();
+                    Alerts.auctionAlert("Error loading login page");
+                }
             }
         }  catch ( Exception e) {
             e.printStackTrace();
             Alerts.auctionAlert("Error adding Lot to Auction");
         }
     }
+
+    private boolean validateLot(){
+        if(listingName.getText().equals("")){
+            Alerts.auctionAlert("Please enter a name");
+            return false;
+        }else if(listingDescription.getText().equals("")){
+            Alerts.auctionAlert("Please enter a description");
+            return false;
+        }else if(listingBINPrice.getText().equals("")){
+            Alerts.auctionAlert("Please enter a buy it now price");
+            return false;
+        }else if(listingAPrice.getText().equals("")){
+            Alerts.auctionAlert("Please enter an auction price");
+            return false;
+        }else if(imageFile == null){
+            Alerts.auctionAlert("Please select a file");
+            return false;
+        }else if(!listingBINPrice.getText().equals("")) {
+            try {
+                Double convertedBuyItNow = Double.parseDouble(listingBINPrice.getText());
+            } catch (Exception e) {
+                Alerts.auctionAlert("Please format your buy it now price as follows 12.34");
+                return false;
+            }
+        }else if (!listingAPrice.getText().equals("")) {
+            try {
+                Double convertedBuyItNow = Double.parseDouble(listingAPrice.getText());
+            } catch (Exception e) {
+                Alerts.auctionAlert("Please format your auction price as follows 12.34");
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static void acceptBid(int jobID){
         if (System.getSecurityManager() == null)

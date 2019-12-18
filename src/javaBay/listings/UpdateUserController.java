@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import net.jini.core.transaction.Transaction;
@@ -110,7 +112,7 @@ public class UpdateUserController {
                 u1753026Lot.lotName = lotName.getText();
                 u1753026Lot.lotDescription = lotDescription.getText();
                 u1753026Lot.BINprice = Double.parseDouble(lotBINPrice.getText());
-                if( u1753026Lot.currentAprice == u1753026Lot.startAprice){
+                if( u1753026Lot.currentAprice.equals(u1753026Lot.startAprice)){
                     u1753026Lot.startAprice = Double.parseDouble(lotStartAPrice.getText());
                     u1753026Lot.currentAprice = Double.parseDouble(lotStartAPrice.getText());
                 }
@@ -126,6 +128,32 @@ public class UpdateUserController {
             txn.commit();
         } catch (Exception e) {
             System.out.print("Transaction failed " + e);
+        }
+    }
+    @FXML
+    public void removeListing(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to remove your listing", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.YES) {
+            U1753026_Lot listing = U1753026_Lot.getInstance();
+            JavaSpace space = SpaceUtils.getSpace();
+            try {
+                U1753026_Lot template = new U1753026_Lot(listing.lotNumber);
+                U1753026_Lot u1753026Lot = (U1753026_Lot) space.take(template, null, ONE_SECOND);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
+                Stage stage = (Stage) backBtn.getScene().getWindow();
+                stage.setScene(new Scene(root, 1200, 720));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Alerts.auctionAlert("Lot Removed!");
+
         }
     }
 }

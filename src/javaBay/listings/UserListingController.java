@@ -50,10 +50,10 @@ public class UserListingController {
                 space = SpaceUtils.getSpace();
                 UserSession user = UserSession.getInstance();
                 int userID = user.getUserID();
-                System.out.println(userID);
+                //System.out.println(userID);
                 U1753026_Lot template = new U1753026_Lot(jobcounter);
                 U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWO_SECONDS);
-                System.out.println(result.toString());
+                //System.out.println(result.toString());
                 if(result.userID != userID){
                     jobcounter++;
                 }else if (result.Status == 0) {
