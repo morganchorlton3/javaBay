@@ -27,12 +27,11 @@ public class Main extends Application {
 
     private static final long ONESECOND = 1000;  // one thousand milliseconds
 
+    HelloWorldNotify notifyer;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
-        primaryStage.setTitle("Java Bay");
-        primaryStage.setScene(new Scene(root, 1200, 720));
-        primaryStage.show();
+
         JavaSpace space = SpaceUtils.getSpace();
         if (space == null){
             Alerts.space("Failed to find space please check it is running");
@@ -43,12 +42,16 @@ public class Main extends Application {
             if (System.getSecurityManager() == null)
                 System.setSecurityManager(new SecurityManager());
 
-            new HelloWorldNotify();
+             notifyer = new HelloWorldNotify();
             //Try
             //String[] args = new String[0];
             //HelloWorldNotify.main(args);
 
         }
+        Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+        primaryStage.setTitle("Java Bay");
+        primaryStage.setScene(new Scene(root, 1200, 720));
+        primaryStage.show();
     }
 
 

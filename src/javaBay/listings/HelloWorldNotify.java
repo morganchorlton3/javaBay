@@ -24,7 +24,7 @@ public class HelloWorldNotify implements RemoteEventListener {
 			System.err.println("Failed to find the javaspace");
 			System.exit(1);
 		}
-
+		System.out.println("adding notify");
 		//exporter
 		Exporter myDefaultExporter =
 				new BasicJeriExporter(TcpServerEndpoint.getInstance(0),
@@ -52,7 +52,7 @@ public class HelloWorldNotify implements RemoteEventListener {
 			U1753026_Lot result = (U1753026_Lot)space.read(template, null, Long.MAX_VALUE);
 			System.out.println("--- Read Item  ---");
 			System.out.println("You have a new bid on your " + result.lotName + " At the value of £" + result.currentAprice);
-			Alerts.auctionAlert("You have a new bid on your " + result.lotName + " At the value of £" + result.currentAprice );
+			//Alerts.auctionAlert("You have a new bid on your " + result.lotName + " At the value of £" + result.currentAprice );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

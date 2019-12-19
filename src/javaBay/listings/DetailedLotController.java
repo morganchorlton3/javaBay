@@ -147,7 +147,7 @@ public class DetailedLotController {
                 u1753026Lot.currentAprice = bid;
                 u1753026Lot.Status = 1;
                 space.write(u1753026Lot, txn, Lease.FOREVER);
-                Alerts.auctionAlert("You have placed a bid with the value of: " + u1753026Lot.currentAprice);
+                //Alerts.auctionAlert("You have placed a bid with the value of: " + u1753026Lot.currentAprice);
                 lotCurrentAPrice.setText("Current Auction Price: " + bid.toString());
                 bidValue.clear();
             } catch (Exception e) {
