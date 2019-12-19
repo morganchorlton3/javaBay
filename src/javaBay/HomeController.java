@@ -1,6 +1,7 @@
 package javaBay;
 
 import javaBay.auth.UserSession;
+import javaBay.listings.ListingChecker;
 import javaBay.listings.ListingNotify;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -155,12 +156,19 @@ public class HomeController {
             U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
             //load new window
             try {
+                //Load A New Window
+                /*root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Listing: " + result.lotName);
+                stage.setScene(new Scene(root, 450, 450));
+                stage.show();*/
                 Parent root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
                 Stage stage = (Stage) loginBtn.getScene().getWindow();
                 stage.setScene(new Scene(root, 1200, 720));
+
             }catch ( Exception e) {
                 e.printStackTrace();
-                Alerts.auctionAlert("Error loading login page");
+                Alerts.auctionAlert("Error loading Listing page");
             }
         } catch (Exception e) {
             e.printStackTrace();

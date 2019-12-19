@@ -20,7 +20,7 @@ public class ListingNotify implements RemoteEventListener {
     private JavaSpace space;
     private RemoteEventListener theStub;
 
-    public ListingNotify(int jobID) {
+    public ListingNotify() {
         //System.out.println(jobID);
         // find the space
         space = SpaceUtils.getSpace();
@@ -39,7 +39,7 @@ public class ListingNotify implements RemoteEventListener {
                 theStub = (RemoteEventListener) myDefaultExporter.export(this);
 
                 // add the listener
-                U1753026_Lot template = new U1753026_Lot(jobID);
+                U1753026_Lot template = new U1753026_Lot();
                 space.notify(template, null, this.theStub, Lease.FOREVER, null);
 
             } catch (Exception e) {

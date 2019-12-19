@@ -109,8 +109,6 @@ public class DetailedLotController {
 
     public void placeBid(Double bid){
         U1753026_Lot listing = U1753026_Lot.getInstance();
-        if (System.getSecurityManager() == null)
-            System.setSecurityManager(new SecurityManager());
 
         // Find the transaction manager on the network
         TransactionManager mgr = SpaceUtils.getManager();

@@ -100,7 +100,6 @@ public class ListingController {
                 qStatus.addItem();
                 space.write(qStatus, null, Lease.FOREVER);
                 Alerts.auctionAlert("Lot added to auction");
-                new ListingNotify(newU1753026Lot.lotNumber);
 
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));

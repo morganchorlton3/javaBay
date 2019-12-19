@@ -1,6 +1,10 @@
 package javaBay;
 
 import javaBay.auth.U1753026_Authentication;
+import javaBay.listings.HelloWorldNotify;
+import javaBay.listings.HelloWorldchange;
+import javaBay.listings.ListingChecker;
+import javaBay.listings.ListingNotify;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +39,15 @@ public class Main extends Application {
         }else{
             startAuthentication(space);
             startAuction(space);
+            //Try
+            if (System.getSecurityManager() == null)
+                System.setSecurityManager(new SecurityManager());
+
+            new HelloWorldNotify();
+            //Try
+            //String[] args = new String[0];
+            //HelloWorldNotify.main(args);
+
         }
     }
 
