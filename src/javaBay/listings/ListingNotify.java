@@ -6,6 +6,7 @@ import javaBay.U1753026_Lot;
 import javaBay.SpaceUtils;
 import javaBay.auth.U1753026_Authentication;
 import javaBay.auth.UserSession;
+import javafx.application.Platform;
 import net.jini.core.event.RemoteEvent;
 import net.jini.core.event.RemoteEventListener;
 import net.jini.core.lease.Lease;
@@ -52,6 +53,20 @@ public class ListingNotify implements RemoteEventListener {
         // this is the method called when we are notified
         // of an object of interest
         // add the listener
-        System.out.println("----- LISTING NOTIFY -----");
+        //System.out.println("----- LISTING NOTIFY -----");
+        U1753026_Lot template= new U1753026_Lot();
+        try{
+            U1753026_Lot result = (U1753026_Lot)space.read(template,null,Long.MAX_VALUE);
+            if (result.Status == 1 && UserSession.getInstance().getUserID() == result.userID){
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        Alerts.auctionAlert("You Have a bid to accept");
+                    }
+                });
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

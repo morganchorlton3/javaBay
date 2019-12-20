@@ -27,7 +27,7 @@ public class Main extends Application {
 
     private static final long ONESECOND = 1000;  // one thousand milliseconds
 
-    HelloWorldNotify notifyer;
+    ListingNotify notifyer;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -42,10 +42,7 @@ public class Main extends Application {
             if (System.getSecurityManager() == null)
                 System.setSecurityManager(new SecurityManager());
 
-             notifyer = new HelloWorldNotify();
-            //Try
-            //String[] args = new String[0];
-            //HelloWorldNotify.main(args);
+             notifyer = new ListingNotify();
 
         }
         Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
