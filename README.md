@@ -13,3 +13,9 @@ Ebay clone using java spaces (University Assignment)
   * reggie.jar
   * reggie-dl.jar
   * Java FX
+  
+  Note: If you are running the application it would be best to test the application and then run the test as the tests can modify the objects in the space and cause an error, if this error does occour you need to remove all the objects from the space and start fresh. this can be done by restarting the spacer or uncoment the line :
+  
+  stopAllSpaces(space);
+  
+  in Main.class

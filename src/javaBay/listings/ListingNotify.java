@@ -53,20 +53,26 @@ public class ListingNotify implements RemoteEventListener {
         // this is the method called when we are notified
         // of an object of interest
         // add the listener
-        //System.out.println("----- LISTING NOTIFY -----");
-        U1753026_Lot template= new U1753026_Lot();
-        try{
-            U1753026_Lot result = (U1753026_Lot)space.read(template,null,Long.MAX_VALUE);
-            if (result.Status == 1 && UserSession.getInstance().getUserID() == result.userID){
-                Platform.runLater(new Runnable(){
-                    @Override
-                    public void run() {
-                        Alerts.auctionAlert("You Have a bid to accept");
-                    }
-                });
+        System.out.println("----- LISTING NOTIFY -----");
+        int jobCounter = 0;
+        while (true) {
+            try {
+                U1753026_Lot template = new U1753026_Lot(jobCounter);
+                U1753026_Lot result = (U1753026_Lot) space.read(template, null, Long.MAX_VALUE);
+                System.out.println(result.Status);
+                System.out.println(result.lotName);
+                if (result.Status == 1 && UserSession.getInstance().getUserID() == result.userID) {
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            Alerts.auctionAlert("You Have a bid to accept");
+                        }
+                    });
+                }
+                jobCounter++;
+            } catch (Exception e) {
+                break;
             }
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 }

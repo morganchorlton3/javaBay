@@ -2,27 +2,27 @@ package javaBay.auth;
 
 import net.jini.core.entry.Entry;
 
-public class User implements Entry {
+public class U1753026_User implements Entry {
     // Variables
     public Integer userId;
     public String userName, userEmail, userPassword;
 
     // No arg contructor
-    public User (){
+    public U1753026_User(){
     }
 
     //Createuser login template
-    public User ( String name, String password){
+    public U1753026_User(String name, String password){
         userName = name;
         userPassword = password;
     }
 
-    public User (String email){
+    public U1753026_User(String email){
         userEmail = email;
     }
 
     // Register user
-    public User (int id, String name, String email, String password){
+    public U1753026_User(int id, String name, String email, String password){
         userId = id;
         userName = name;
         userEmail = email;

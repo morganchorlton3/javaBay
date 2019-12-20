@@ -60,8 +60,8 @@ public class RegisterController {
             String userEmail = email.getText();
             String userPassword = password.getText();
             String userPasswordConfirm = confirm_password.getText();
-            User newUser = new User(id, name, userEmail, userPassword);
-            if(RegisterUser(newUser, userPasswordConfirm, authStatus)){
+            U1753026_User newU1753026User = new U1753026_User(id, name, userEmail, userPassword);
+            if(RegisterUser(newU1753026User, userPasswordConfirm, authStatus)){
                 Alerts.auctionAlert("User registered please login");
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("../Home.fxml"));
@@ -78,20 +78,20 @@ public class RegisterController {
         }
 
     }
-    public boolean RegisterUser(User user, String userPasswordConfirm, U1753026_Authentication authStatus){
+    public boolean RegisterUser(U1753026_User u1753026User, String userPasswordConfirm, U1753026_Authentication authStatus){
         try {
 
             //check if user exists
-            User ifExistsTemplate = new User(user.userName);
-            User ifExists = (User) space.readIfExists(ifExistsTemplate, null, TWO_MINUTES);
+            U1753026_User ifExistsTemplate = new U1753026_User(u1753026User.userName);
+            U1753026_User ifExists = (U1753026_User) space.readIfExists(ifExistsTemplate, null, TWO_MINUTES);
             //Check that the passwords match
-            if (!user.userPassword.equals(userPasswordConfirm)){
+            if (!u1753026User.userPassword.equals(userPasswordConfirm)){
                 Alerts.userAlert("Your passwords don't match");
             }else if(ifExists != null){
                 Alerts.userAlert("A user has already been registered with that email");
             }else{
                 //write user to space
-                space.write(user, null, Lease.FOREVER);
+                space.write(u1753026User, null, Lease.FOREVER);
                 //Update user int count
                 authStatus.addItem();
                 space.write(authStatus, null, Lease.FOREVER);

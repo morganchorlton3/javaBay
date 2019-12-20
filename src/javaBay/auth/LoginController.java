@@ -42,8 +42,8 @@ public class LoginController {
             String inputUsername  = username.getText();
             String inputPassword = password.getText();
             //creates a new template with the imputed credentials
-            User user = new User(inputUsername, inputPassword);
-            UserSession loggedInUser = LoginUser(user);
+            U1753026_User u1753026User = new U1753026_User(inputUsername, inputPassword);
+            UserSession loggedInUser = LoginUser(u1753026User);
             if (loggedInUser != null) {
                 Alerts.auctionAlert("Hi, " + loggedInUser.getUserName() + " ,you are now logged in");
                 //creates a user session
@@ -63,14 +63,14 @@ public class LoginController {
         }
     }
 
-    public UserSession LoginUser(User user){
+    public UserSession LoginUser(U1753026_User u1753026User){
         try {
             space = SpaceUtils.getSpace();
             //check to see if there is a user matching the imputed template
-            User loggedInUser = (User) space.readIfExists(user, null, TWOH);
-            int userId = loggedInUser.userId;
-            String userName = loggedInUser.userName;
-            String userEmail = loggedInUser.userEmail;
+            U1753026_User loggedInU1753026User = (U1753026_User) space.readIfExists(u1753026User, null, TWOH);
+            int userId = loggedInU1753026User.userId;
+            String userName = loggedInU1753026User.userName;
+            String userEmail = loggedInU1753026User.userEmail;
             //creates a user session
             UserSession.getInstace(userId, userName, userEmail);
         } catch (Exception e) {

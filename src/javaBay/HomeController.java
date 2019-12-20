@@ -1,22 +1,17 @@
 package javaBay;
 
 import javaBay.auth.UserSession;
-import javaBay.listings.ListingChecker;
-import javaBay.listings.ListingNotify;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import net.jini.space.JavaSpace;
@@ -25,7 +20,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class HomeController {
@@ -152,12 +146,12 @@ public class HomeController {
             space = SpaceUtils.getSpace();
             U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWOS);
 
-            //clear instance in case it has already been used
-            U1753026_Lot.emptyInstance();
-            //Check if the status has been bought
-            /*if (result.Status != 0 && result.Status != 1){
+                //clear instance in case it has already been used
+                U1753026_Lot.emptyInstance();
+                //Check if the status has been bought
+            if (result.Status != 0 && result.Status != 1){
                 Alerts.auctionAlert("Sorry this item has just been bought");
-            }else {*/
+            }else {
                 //set lot instance to be used in next window
                 U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
                 //load new window
@@ -176,7 +170,7 @@ public class HomeController {
                     e.printStackTrace();
                     Alerts.auctionAlert("Error loading Listing page");
                 }
-           // }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
