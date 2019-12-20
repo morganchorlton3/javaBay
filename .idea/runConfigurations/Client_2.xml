@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Client 2" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="javaBay.Main" />
+    <module name="javaBay" />
+    <option name="VM_PARAMETERS" value="-Djava.security.policy=policy.all -Djava.rmi.server.useCodebaseOnly=false  --module-path /local/javafx-sdk-11.0.2/lib --add-modules=javafx.controls,javafx.fxml" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

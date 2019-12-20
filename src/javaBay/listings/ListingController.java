@@ -107,7 +107,7 @@ public class ListingController {
                     stage.setScene(new Scene(root, 1200, 720));
                 }catch ( Exception e) {
                     e.printStackTrace();
-                    Alerts.auctionAlert("Error loading login page");
+                    Alerts.auctionAlert("Error loading Home page");
                 }
             }
         }  catch ( Exception e) {

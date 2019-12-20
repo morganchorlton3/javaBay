@@ -147,9 +147,9 @@ public class DetailedLotController {
                 u1753026Lot.currentAprice = bid;
                 u1753026Lot.Status = 1;
                 space.write(u1753026Lot, txn, Lease.FOREVER);
-                //Alerts.auctionAlert("You have placed a bid with the value of: " + u1753026Lot.currentAprice);
-                lotCurrentAPrice.setText("Current Auction Price: " + bid.toString());
-                bidValue.clear();
+                //Update instance
+                U1753026_Lot.getInstace(u1753026Lot.lotNumber, u1753026Lot.lotName, u1753026Lot.lotDescription,
+                        u1753026Lot.userID, u1753026Lot.userName, u1753026Lot.BINprice, u1753026Lot.currentAprice, u1753026Lot.lotImage);
             } catch (Exception e) {
                 Alerts.space("Failed to read or write to space");
                 txn.abort();
@@ -157,6 +157,11 @@ public class DetailedLotController {
             }
             // ... and commit the transaction.
             txn.commit();
+            //display to user that the bid has been placed
+            Alerts.auctionAlert("You have placed a bid with the value of: " + U1753026_Lot.getInstance().currentAprice);
+            //Update the GUI
+            lotCurrentAPrice.setText("Current Auction Price: " + bid.toString());
+            bidValue.clear();
         } catch (Exception e) {
             Alerts.space("Transaction Failed");
         }

@@ -1,9 +1,6 @@
 package javaBay;
 
 import javaBay.auth.U1753026_Authentication;
-import javaBay.listings.HelloWorldNotify;
-import javaBay.listings.HelloWorldchange;
-import javaBay.listings.ListingChecker;
 import javaBay.listings.ListingNotify;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -14,6 +11,8 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import net.jini.core.lease.Lease;
 import net.jini.space.JavaSpace;
+
+import java.rmi.server.ExportException;
 
 public class Main extends Application {
 
@@ -31,11 +30,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         JavaSpace space = SpaceUtils.getSpace();
         if (space == null){
             Alerts.space("Failed to find space please check it is running");
         }else{
+            //Testing Stop Auction
+            //stopAllSpaces(space);
+
             startAuthentication(space);
             startAuction(space);
             //Try
@@ -43,6 +44,8 @@ public class Main extends Application {
                 System.setSecurityManager(new SecurityManager());
 
              notifyer = new ListingNotify();
+
+
 
         }
         Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
@@ -75,6 +78,32 @@ public class Main extends Application {
                 System.out.println(template.getClass().getName() + " object is already in the space");
                 //Alerts.auctionAlert("Auction Started");
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void stopAllSpaces(JavaSpace space){
+        U1753026_Auction template = new U1753026_Auction();
+        try {
+            U1753026_Auction returnedObject = (U1753026_Auction)space.take(template,null, ONESECOND);
+                // there is already an object available, so don't create one
+                System.out.println(template.getClass().getName() + " Object removed");
+                //Alerts.auctionAlert("Auction Started");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Lot
+        U1753026_Lot lotTemplate = new U1753026_Lot();
+        try {
+            U1753026_Lot returnedObject = (U1753026_Lot)space.take(lotTemplate,null, ONESECOND);
+            // there is already an object available, so don't create one
+            System.out.println(template.getClass().getName() + " Object removed");
+            //Alerts.auctionAlert("Auction Started");
+
 
         } catch (Exception e) {
             e.printStackTrace();

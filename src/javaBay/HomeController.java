@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -150,26 +151,32 @@ public class HomeController {
         try {
             space = SpaceUtils.getSpace();
             U1753026_Lot result = (U1753026_Lot) space.read(template, null, TWOS);
+
             //clear instance in case it has already been used
             U1753026_Lot.emptyInstance();
-            //set lot instance to be used in next window
-            U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
-            //load new window
-            try {
-                //Load A New Window
-                /*root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
-                Stage stage = new Stage();
-                stage.setTitle("Listing: " + result.lotName);
-                stage.setScene(new Scene(root, 450, 450));
-                stage.show();*/
-                Parent root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
-                Stage stage = (Stage) loginBtn.getScene().getWindow();
-                stage.setScene(new Scene(root, 1200, 720));
+            //Check if the status has been bought
+            /*if (result.Status != 0 && result.Status != 1){
+                Alerts.auctionAlert("Sorry this item has just been bought");
+            }else {*/
+                //set lot instance to be used in next window
+                U1753026_Lot.getInstace(result.lotNumber, result.lotName, result.lotDescription, result.userID, result.userName, result.BINprice, result.currentAprice, result.lotImage);
+                //load new window
+                try {
+                    //Load A New Window
+                    /*root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
+                    Stage stage = new Stage();
+                    stage.setTitle("Listing: " + result.lotName);
+                    stage.setScene(new Scene(root, 450, 450));
+                    stage.show();*/
+                    Parent root = FXMLLoader.load(getClass().getResource("listings/DetailedLot.fxml"));
+                    Stage stage = (Stage) loginBtn.getScene().getWindow();
+                    stage.setScene(new Scene(root, 1200, 720));
 
-            }catch ( Exception e) {
-                e.printStackTrace();
-                Alerts.auctionAlert("Error loading Listing page");
-            }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Alerts.auctionAlert("Error loading Listing page");
+                }
+           // }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,8 +191,10 @@ public class HomeController {
                 int userID = user.getUserID();
                 U1753026_Lot template = new U1753026_Lot(jobCounter);
                 U1753026_Lot result = (U1753026_Lot) space.readIfExists(template, null, TWOS);
+                //Print out lot
+                //System.out.println(result.toString());
 
-                /*if(result.Status == 1){
+                if(result.Status == 1){
                     //Lot has an active bid
                     if (result.userID == userID){
                         //If the user logged in display alert for bid to accept
@@ -197,7 +206,7 @@ public class HomeController {
                     userListings.getItems().add(result);
                     //setCell(result);
                     updateCell();
-                }else */ if (result.Status == 2 | result.Status == 3 ) {
+                }else if (result.Status == 2 | result.Status == 3 ) {
                     //Lot already purchased Don't show and go to next item
                     jobCounter++;
                 } else {
