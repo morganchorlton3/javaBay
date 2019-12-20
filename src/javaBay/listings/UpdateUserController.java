@@ -117,7 +117,12 @@ public class UpdateUserController {
                     u1753026Lot.currentAprice = Double.parseDouble(lotStartAPrice.getText());
                 }
                 space.write(u1753026Lot, txn, FOREVER);
-                Alerts.auctionAlert("Lot Updated");
+                //Clear Instance
+                U1753026_Lot.emptyInstance();
+                //Update instance
+                U1753026_Lot.getInstace(u1753026Lot.lotNumber, u1753026Lot.lotName, u1753026Lot.lotDescription,
+                        u1753026Lot.userID, u1753026Lot.userName, u1753026Lot.BINprice, u1753026Lot.currentAprice, u1753026Lot.lotImage);
+
             } catch (Exception e) {
                 System.out.println("Failed to read or write to space " + e);
                 txn.abort();
@@ -126,6 +131,7 @@ public class UpdateUserController {
 
             // ... and commit the transaction.
             txn.commit();
+            Alerts.auctionAlert("Lot Updated");
         } catch (Exception e) {
             System.out.print("Transaction failed " + e);
         }

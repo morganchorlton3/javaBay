@@ -147,6 +147,8 @@ public class DetailedLotController {
                 u1753026Lot.currentAprice = bid;
                 u1753026Lot.Status = 1;
                 space.write(u1753026Lot, txn, Lease.FOREVER);
+                //Clear Instance
+                U1753026_Lot.emptyInstance();
                 //Update instance
                 U1753026_Lot.getInstace(u1753026Lot.lotNumber, u1753026Lot.lotName, u1753026Lot.lotDescription,
                         u1753026Lot.userID, u1753026Lot.userName, u1753026Lot.BINprice, u1753026Lot.currentAprice, u1753026Lot.lotImage);
@@ -210,7 +212,11 @@ public class DetailedLotController {
                 // ... edit that object and write it back again...
                 u1753026Lot.Status = 2;
                 space.write(u1753026Lot, txn, FOREVER);
-                Alerts.auctionAlert("You have successfully bought this item for: " + u1753026Lot.BINprice);
+                //Clear Instance
+                U1753026_Lot.emptyInstance();
+                //Update instance
+                U1753026_Lot.getInstace(u1753026Lot.lotNumber, u1753026Lot.lotName, u1753026Lot.lotDescription,
+                        u1753026Lot.userID, u1753026Lot.userName, u1753026Lot.BINprice, u1753026Lot.currentAprice, u1753026Lot.lotImage);
             } catch (Exception e) {
                 Alerts.space("Failed to write to space");
                 txn.abort();
@@ -219,6 +225,7 @@ public class DetailedLotController {
 
             // ... and commit the transaction.
             txn.commit();
+            Alerts.auctionAlert("You have successfully bought this item for: " + U1753026_Lot.getInstance().BINprice);
             try{
                 Parent root = FXMLLoader.load(getClass().getResource("DetailedLot.fxml"));
                 Stage stage = (Stage) back.getScene().getWindow();
