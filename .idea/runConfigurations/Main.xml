@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="javaBay.Main" />
+    <module name="javaBay" />
+    <option name="VM_PARAMETERS" value="-Djava.security.policy=policy.all -Djava.rmi.server.useCodebaseOnly=false  --module-path /local/javafx-sdk-11.0.2/lib --add-modules=javafx.controls,javafx.fxml" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="javaBay.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

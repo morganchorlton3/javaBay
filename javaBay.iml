@@ -6,13 +6,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/apache-river-3.0.0/lib/jsk-lib.jar!/" />
+          <root url="jar:///local/apache-river-3.0.0/lib/jsk-lib.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -21,7 +21,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/apache-river-3.0.0/lib/jsk-platform.jar!/" />
+          <root url="jar:///local/apache-river-3.0.0/lib/jsk-platform.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -30,7 +30,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/apache-river-3.0.0/lib/outrigger.jar!/" />
+          <root url="jar:///local/apache-river-3.0.0/lib/outrigger.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -39,7 +39,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/apache-river-3.0.0/lib/reggie.jar!/" />
+          <root url="jar:///local/apache-river-3.0.0/lib/reggie.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -48,10 +48,26 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/apache-river-3.0.0/lib-dl/reggie-dl.jar!/" />
+          <root url="jar:///local/apache-river-3.0.0/lib-dl/reggie-dl.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file:///local/javafx/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <NATIVE>
+          <root url="file:///local/javafx/lib" />
+        </NATIVE>
+        <SOURCES>
+          <root url="file:///local/javafx/lib" />
+        </SOURCES>
+        <jarDirectory url="file:///local/javafx/lib" recursive="false" />
+        <jarDirectory url="file:///local/javafx/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>
